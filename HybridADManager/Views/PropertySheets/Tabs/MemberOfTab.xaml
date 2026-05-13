@@ -1,0 +1,46 @@
+<UserControl x:Class="HybridADManager.Views.PropertySheets.Tabs.MemberOfTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Text="Group memberships:"
+                   FontWeight="SemiBold"
+                   Margin="0,0,0,6"/>
+
+        <Border Grid.Row="1"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="1">
+            <ListView ItemsSource="{Binding Groups}"
+                      AlternationCount="2">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Name" Width="250"
+                                        DisplayMemberBinding="{Binding}"/>
+                        <GridViewColumn Header="Active Directory Domain Services Folder" Width="*"
+                                        DisplayMemberBinding="{Binding}"/>
+                        <GridViewColumn Header="Type" Width="100"
+                                        DisplayMemberBinding="{Binding}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Border>
+
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,8,0,0">
+            <Button Content="Add..."
+                    Width="75" Height="23"
+                    Margin="0,0,6,0"/>
+            <Button Content="Remove"
+                    Width="75" Height="23"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,41 @@
+<UserControl x:Class="HybridADManager.Views.DirectoryTreeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:HybridADManager.ViewModels"
+             xmlns:models="clr-namespace:HybridADManager.Models"
+             xmlns:converters="clr-namespace:HybridADManager.Infrastructure.Converters">
+
+    <Grid>
+        <TreeView ItemsSource="{Binding Nodes}"
+                  SelectedItemChanged="TreeView_SelectedItemChanged"
+                  VirtualizingStackPanel.IsVirtualizing="True"
+                  VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem"
+                       BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/ >
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/ >
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type models:DirectoryNode}"
+                                          ItemsSource="{Binding Children}">
+                    <StackPanel Orientation="Horizontal"
+                                Margin="2,1">
+                        <Image Source="{Binding NodeType, Converter={StaticResource ObjectTypeToIconConverter}}"
+                               Width="16"
+                               Height="16"
+                               Margin="0,0,4,0"/>
+                        <TextBlock Text="{Binding DisplayName}"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Text=" ⏳"
+                                   Foreground="{StaticResource SyncPendingBrush}"
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Center"
+                                   Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+    </Grid>
+</UserControl>

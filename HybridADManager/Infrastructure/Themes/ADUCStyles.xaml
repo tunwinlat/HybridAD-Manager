@@ -1,0 +1,272 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Window Style -->
+    <Style TargetType="Window" x:Key="ADUCWindowStyle">
+        <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}"/ >
+        <Setter Property="FontFamily" Value="Segoe UI"/ >
+        <Setter Property="FontSize" Value="12"/ >
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/ >
+    </Style>
+
+    <!-- Menu Style -->
+    <Style TargetType="Menu">
+        <Setter Property="Background" Value="{StaticResource MenuBackgroundBrush}"/ >
+        <Setter Property="FontSize" Value="12"/ >
+        <Setter Property="Padding" Value="2"/ >
+    </Style>
+    <Style TargetType="MenuItem">
+        <Setter Property="Padding" Value="8,3"/ >
+    </Style>
+
+    <!-- ToolBar Style -->
+    <Style TargetType="ToolBar">
+        <Setter Property="Background" Value="{StaticResource ToolbarBackgroundBrush}"/ >
+        <Setter Property="Height" Value="32"/ >
+        <Setter Property="Padding" Value="4,0"/ >
+    </Style>
+
+    <!-- ToolBar Button -->
+    <Style TargetType="Button" x:Key="ToolbarButtonStyle">
+        <Setter Property="Background" Value="Transparent"/ >
+        <Setter Property="BorderBrush" Value="Transparent"/ >
+        <Setter Property="Padding" Value="6,2"/ >
+        <Setter Property="Margin" Value="1,0"/ >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="2"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource ButtonHoverBackground}"/ >
+                <Setter Property="BorderBrush" Value="{StaticResource ButtonBorder}"/ >
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource ButtonPressedBackground}"/ >
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/ >
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- TreeView Style -->
+    <Style TargetType="TreeView">
+        <Setter Property="Background" Value="{StaticResource TreeBackground}"/ >
+        <Setter Property="BorderBrush" Value="{StaticResource PaneBorderBrush}"/ >
+        <Setter Property="BorderThickness" Value="0,0,1,0"/ >
+    </Style>
+
+    <Style TargetType="TreeViewItem">
+        <Setter Property="Padding" Value="4,2"/ >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TreeViewItem">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/ >
+                            <RowDefinition/ >
+                        </Grid.RowDefinitions>
+                        <Border x:Name="Bd"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="{TemplateBinding Padding}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="19"/>
+                                    <ColumnDefinition/ >
+                                </Grid.ColumnDefinitions>
+                                <ToggleButton x:Name="Expander"
+                                             ClickMode="Press"
+                                             IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                                             Style="{StaticResource ExpandCollapseToggleStyle}"
+                                             HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"
+                                             Visibility="{Binding HasItems, Converter={StaticResource BoolToVisibilityConverter}, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                <ContentPresenter x:Name="PART_Header"
+                                                  Grid.Column="1"
+                                                  ContentSource="Header"
+                                                  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/ >
+                            </Grid>
+                        </Border>
+                        <ItemsPresenter x:Name="ItemsHost"
+                                       Grid.Row="1"
+                                       Margin="19,0,0,0"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource TreeItemSelected}"/ >
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="True"/ >
+                                <Condition Property="IsSelectionActive" Value="False"/ >
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource TreeItemHover}"/ >
+                        </MultiTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource TreeItemHover}"/ >
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Expand/Collapse Toggle Button -->
+    <Style x:Key="ExpandCollapseToggleStyle" TargetType="ToggleButton">
+        <Setter Property="Focusable" Value="False"/ >
+        <Setter Property="Width" Value="16"/ >
+        <Setter Property="Height" Value="16"/ >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border Background="Transparent"
+                            Width="16" Height="16"
+                            Padding="4">
+                        <Path x:Name="Arrow"
+                              Data="M 0 0 L 4 4 L 0 8 Z"
+                              Fill="{StaticResource ForegroundMutedBrush}"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              RenderTransformOrigin="0.5,0.5"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Arrow" Property="RenderTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="90"/ >
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ListView / GridView -->
+    <Style TargetType="ListView">
+        <Setter Property="Background" Value="{StaticResource PaneBackgroundBrush}"/ >
+        <Setter Property="BorderBrush" Value="{StaticResource PaneBorderBrush}"/ >
+        <Setter Property="BorderThickness" Value="0"/ >
+    </Style>
+
+    <Style TargetType="GridViewColumnHeader">
+        <Setter Property="Background" Value="{StaticResource ToolbarBackgroundBrush}"/ >
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/ >
+        <Setter Property="FontWeight" Value="Normal"/ >
+        <Setter Property="Padding" Value="6,4"/ >
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/ >
+        <Setter Property="BorderThickness" Value="0,0,1,1"/ >
+        <Setter Property="HorizontalContentAlignment" Value="Left"/ >
+    </Style>
+
+    <Style TargetType="ListViewItem">
+        <Setter Property="Padding" Value="4,2"/ >
+        <Setter Property="BorderThickness" Value="0"/ >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListViewItem">
+                    <Border x:Name="Bd"
+                            Background="Transparent"
+                            BorderThickness="1"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource SelectedItemBackground}"/ >
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="True"/ >
+                                <Condition Property="IsSelectionActive" Value="False"/ >
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource SelectionBrush}"/ >
+                        </MultiTrigger>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource AlternatingRowBackground}"/ >
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- StatusBar -->
+    <Style TargetType="StatusBar">
+        <Setter Property="Background" Value="{StaticResource StatusBarBackgroundBrush}"/ >
+        <Setter Property="Foreground" Value="{StaticResource StatusBarForegroundBrush}"/ >
+        <Setter Property="FontSize" Value="11"/ >
+        <Setter Property="Height" Value="24"/ >
+        <Setter Property="Padding" Value="8,0"/ >
+    </Style>
+
+    <Style TargetType="StatusBarItem">
+        <Setter Property="Foreground" Value="{StaticResource StatusBarForegroundBrush}"/ >
+    </Style>
+
+    <!-- Splitter -->
+    <Style TargetType="GridSplitter">
+        <Setter Property="Background" Value="{StaticResource SplitterBackground}"/ >
+        <Setter Property="Width" Value="4"/ >
+        <Setter Property="HorizontalAlignment" Value="Center"/ >
+        <Setter Property="ShowsPreview" Value="False"/ >
+    </Style>
+
+    <!-- TabControl (Property Sheet style) -->
+    <Style TargetType="TabControl" x:Key="PropertySheetTabControl">
+        <Setter Property="Background" Value="{StaticResource PaneBackgroundBrush}"/ >
+        <Setter Property="BorderBrush" Value="{StaticResource TabBorderBrush}"/ >
+        <Setter Property="BorderThickness" Value="1"/ >
+        <Setter Property="Padding" Value="8"/ >
+    </Style>
+
+    <Style TargetType="TabItem" x:Key="PropertySheetTabItem">
+        <Setter Property="Background" Value="{StaticResource TabItemBackground}"/ >
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/ >
+        <Setter Property="Padding" Value="10,4"/ >
+        <Setter Property="BorderBrush" Value="{StaticResource TabBorderBrush}"/ >
+        <Setter Property="BorderThickness" Value="1,1,1,0"/ >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <Border x:Name="Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="3,3,0,0"
+                            Padding="{TemplateBinding Padding}"
+                            Margin="2,0,0,0">
+                        <ContentPresenter ContentSource="Header"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource TabItemSelectedBackground}"/ >
+                            <Setter TargetName="Border" Property="BorderThickness" Value="1,1,1,0"/ >
+                            <Setter TargetName="Border" Property="Margin" Value="2,0,0,-1"/ >
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource TabItemHoverBackground}"/ >
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

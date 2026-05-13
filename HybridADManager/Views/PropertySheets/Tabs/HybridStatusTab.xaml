@@ -1,0 +1,177 @@
+<UserControl x:Class="HybridADManager.Views.PropertySheets.Tabs.HybridStatusTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  Margin="12">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Header -->
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                       Text="Hybrid Identity Status"
+                       FontSize="14" FontWeight="SemiBold"
+                       Margin="0,0,0,12"/>
+
+            <!-- Sync Status Badge -->
+            <Label Grid.Row="1" Grid.Column="0" Content="Sync Status:"
+                   VerticalAlignment="Center"/>
+            <StackPanel Grid.Row="1" Grid.Column="1"
+                        Orientation="Horizontal">
+                <Border Background="{Binding User.SyncStatus.Status, Converter={StaticResource SyncStatusToBrushConverter}}"
+                        CornerRadius="4"
+                        Padding="10,4"
+                        VerticalAlignment="Center">
+                    <TextBlock Text="{Binding User.SyncStatus.DisplayText}"
+                               Foreground="White"
+                               FontWeight="SemiBold"/>
+                </Border>
+                <TextBlock Text="{Binding SyncDetails.LastDirSyncTime, StringFormat='Last sync: {0:yyyy-MM-dd HH:mm}'}"
+                           VerticalAlignment="Center"
+                           Margin="12,0,0,0"
+                           Foreground="{StaticResource ForegroundMutedBrush}"
+                           Visibility="{Binding HasLastSyncTime, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            </StackPanel>
+
+            <Separator Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                       Margin="0,12"/>
+
+            <!-- Entra ID Section -->
+            <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                       Text="Microsoft Entra ID"
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,8"/>
+
+            <Label Grid.Row="4" Grid.Column="0" Content="Entra Object ID:"
+                   VerticalAlignment="Center"/>
+            <TextBox Grid.Row="4" Grid.Column="1"
+                     Text="{Binding User.EntraObjectId, FallbackValue='Not synced'}"
+                     IsReadOnly="True"
+                     VerticalContentAlignment="Center"
+                     Padding="4,2"
+                     Background="{StaticResource ToolbarBackgroundBrush}"/>
+
+            <Label Grid.Row="5" Grid.Column="0" Content="Immutable ID:"
+                   VerticalAlignment="Center"/>
+            <TextBox Grid.Row="5" Grid.Column="1"
+                     Text="{Binding SyncDetails.ImmutableId, FallbackValue='N/A'}"
+                     IsReadOnly="True"
+                     VerticalContentAlignment="Center"
+                     Padding="4,2"
+                     Background="{StaticResource ToolbarBackgroundBrush}"/>
+
+            <Label Grid.Row="6" Grid.Column="0" Content="Directory Source:"
+                   VerticalAlignment="Center"/>
+            <TextBox Grid.Row="6" Grid.Column="1"
+                     Text="{Binding DirectorySourceText}"
+                     IsReadOnly="True"
+                     VerticalContentAlignment="Center"
+                     Padding="4,2"
+                     Background="{StaticResource ToolbarBackgroundBrush}"/>
+
+            <Separator Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
+                       Margin="0,12"/>
+
+            <!-- On-Premises Section -->
+            <TextBlock Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
+                       Text="On-Premises Active Directory"
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,8"/>
+
+            <Label Grid.Row="9" Grid.Column="0" Content="Distinguished Name:"
+                   VerticalAlignment="Center"/>
+            <TextBox Grid.Row="9" Grid.Column="1"
+                     Text="{Binding SyncDetails.OnPremisesDistinguishedName, FallbackValue='N/A'}"
+                     IsReadOnly="True"
+                     VerticalContentAlignment="Center"
+                     Padding="4,2"
+                     TextWrapping="Wrap"
+                     Background="{StaticResource ToolbarBackgroundBrush}"/>
+
+            <Label Grid.Row="10" Grid.Column="0" Content="Domain Name:"
+                   VerticalAlignment="Center"/>
+            <TextBox Grid.Row="10" Grid.Column="1"
+                     Text="{Binding SyncDetails.OnPremisesDomainName, FallbackValue='N/A'}"
+                     IsReadOnly="True"
+                     VerticalContentAlignment="Center"
+                     Padding="4,2"
+                     Background="{StaticResource ToolbarBackgroundBrush}"/>
+
+            <Label Grid.Row="11" Grid.Column="0" Content="SAM Account Name:"
+                   VerticalAlignment="Center"/>
+            <TextBox Grid.Row="11" Grid.Column="1"
+                     Text="{Binding SyncDetails.OnPremisesSamAccountName, FallbackValue='N/A'}"
+                     IsReadOnly="True"
+                     VerticalContentAlignment="Center"
+                     Padding="4,2"
+                     Background="{StaticResource ToolbarBackgroundBrush}"/>
+
+            <Label Grid.Row="12" Grid.Column="0" Content="Security Identifier:"
+                   VerticalAlignment="Center"/>
+            <TextBox Grid.Row="12" Grid.Column="1"
+                     Text="{Binding SyncDetails.OnPremisesSecurityIdentifier, FallbackValue='N/A'}"
+                     IsReadOnly="True"
+                     VerticalContentAlignment="Center"
+                     Padding="4,2"
+                     Background="{StaticResource ToolbarBackgroundBrush}"/>
+
+            <!-- Sync Errors -->
+            <Border Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="2"
+                    Background="#FFF3F0"
+                    BorderBrush="{StaticResource SyncErrorBrush}"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Padding="12"
+                    Margin="0,16,0,0"
+                    Visibility="{Binding HasSyncErrors, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel>
+                    <TextBlock Text="⚠️ Synchronization Errors"
+                               Foreground="{StaticResource SyncErrorBrush}"
+                               FontWeight="SemiBold"
+                               FontSize="13"/>
+                    <ItemsControl ItemsSource="{Binding SyncDetails.SyncErrors}"
+                                  Margin="0,8,0,0">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,2">
+                                    <TextBlock Text="{Binding ErrorCode, StringFormat='Error Code: {0}'}"
+                                               FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding Message}"
+                                               Foreground="{StaticResource ForegroundMutedBrush}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- Force Sync Button -->
+            <Button Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="2"
+                    Content="🔄 Force Azure AD Sync"
+                    HorizontalAlignment="Left"
+                    Padding="16,6"
+                    Margin="0,16,0,0"
+                    Command="{Binding ForceSyncCommand}"
+                    Visibility="{Binding CanForceSync, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,109 @@
+<UserControl x:Class="HybridADManager.Views.PropertySheets.Tabs.AccountTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- UPN -->
+        <Label Grid.Row="0" Grid.Column="0" Content="User logon name:"
+               VerticalAlignment="Center"/>
+        <StackPanel Grid.Row="0" Grid.Column="1"
+                    Orientation="Horizontal">
+            <TextBox Text="{Binding User.Upn, Mode=TwoWay}"
+                     Width="200"
+                     VerticalContentAlignment="Center"
+                     Padding="3,2"
+                     Margin="0,2"/>
+            <Label Content="@"
+                   VerticalAlignment="Center"
+                   Margin="2,0"/>
+            <ComboBox Width="150"
+                      VerticalContentAlignment="Center"
+                      Margin="0,2"/>
+        </StackPanel>
+
+        <!-- Pre-Win2000 -->
+        <Label Grid.Row="1" Grid.Column="0" Content="User logon name (pre-Windows 2000):"
+               VerticalAlignment="Center"/>
+        <TextBox Grid.Row="1" Grid.Column="1"
+                 VerticalContentAlignment="Center"
+                 Padding="3,2"
+                 Margin="0,2"/>
+
+        <Separator Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                   Margin="0,8"/>
+
+        <!-- Account Options -->
+        <GroupBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                  Header="Account options"
+                  Margin="0,4">
+            <StackPanel Margin="8">
+                <CheckBox Content="User must change password at next logon"
+                          IsChecked="{Binding User.MustChangePasswordAtNextLogon, Mode=TwoWay}"
+                          Margin="0,2"/>
+                <CheckBox Content="User cannot change password"
+                          Margin="0,2"/>
+                <CheckBox Content="Password never expires"
+                          IsChecked="{Binding User.PasswordNeverExpires, Mode=TwoWay}"
+                          Margin="0,2"/>
+                <CheckBox Content="Store password using reversible encryption"
+                          Margin="0,2"/>
+                <CheckBox Content="Account is disabled"
+                          IsChecked="{Binding User.IsEnabled, Mode=TwoWay, Converter={StaticResource InverseBoolConverter}}"
+                          Margin="0,2"/>
+                <CheckBox Content="Smart card is required for interactive logon"
+                          Margin="0,2"/>
+                <CheckBox Content="Account is trusted for delegation"
+                          Margin="0,2"/>
+                <CheckBox Content="Account is sensitive and cannot be delegated"
+                          Margin="0,2"/>
+                <CheckBox Content="Use Kerberos DES encryption types for this account"
+                          Margin="0,2"/>
+                <CheckBox Content="This account supports Kerberos AES 128 bit encryption"
+                          Margin="0,2"/>
+                <CheckBox Content="This account supports Kerberos AES 256 bit encryption"
+                          Margin="0,2"/>
+                <CheckBox Content="Do not require Kerberos preauthentication"
+                          Margin="0,2"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Account Expires -->
+        <GroupBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+                  Header="Account expires"
+                  Margin="0,4">
+            <StackPanel Margin="8" Orientation="Horizontal">
+                <RadioButton Content="Never" IsChecked="True" Margin="0,0,16,0"/>
+                <RadioButton Content="End of:" Margin="0,0,6,0"/>
+                <DatePicker SelectedDate="{Binding User.AccountExpires, Mode=TwoWay}"
+                           VerticalContentAlignment="Center"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Lockout Status -->
+        <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
+                     Orientation="Horizontal"
+                     Visibility="{Binding User.AccountLockedOut, Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBlock Text="⚠️ Account is currently locked out."
+                       Foreground="{StaticResource SyncErrorBrush}"
+                       FontWeight="SemiBold"
+                       VerticalAlignment="Center"/>
+            <Button Content="Unlock Account"
+                    Margin="8,0,0,0"
+                    Padding="8,2"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

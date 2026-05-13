@@ -1,0 +1,71 @@
+<UserControl x:Class="HybridADManager.Views.PropertySheets.Tabs.OrganizationTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Content="Title:"
+               VerticalAlignment="Center"/>
+        <TextBox Grid.Row="0" Grid.Column="1"
+                 Text="{Binding User.JobTitle, Mode=TwoWay}"
+                 VerticalContentAlignment="Center"
+                 Padding="3,2"
+                 Margin="0,2"/>
+
+        <Label Grid.Row="1" Grid.Column="0" Content="Department:"
+               VerticalAlignment="Center"/>
+        <TextBox Grid.Row="1" Grid.Column="1"
+                 Text="{Binding User.Department, Mode=TwoWay}"
+                 VerticalContentAlignment="Center"
+                 Padding="3,2"
+                 Margin="0,2"/>
+
+        <Label Grid.Row="2" Grid.Column="0" Content="Company:"
+               VerticalAlignment="Center"/>
+        <TextBox Grid.Row="2" Grid.Column="1"
+                 Text="{Binding User.Company, Mode=TwoWay}"
+                 VerticalContentAlignment="Center"
+                 Padding="3,2"
+                 Margin="0,2"/>
+
+        <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                   Margin="0,8"/>
+
+        <Label Grid.Row="4" Grid.Column="0" Content="Manager:"
+               VerticalAlignment="Center"/>
+        <DockPanel Grid.Row="4" Grid.Column="1">
+            <Button DockPanel.Dock="Right"
+                    Content="Change..."
+                    Padding="8,2"
+                    Margin="4,0,0,0"/>
+            <TextBox Text="{Binding User.Manager, Mode=TwoWay}"
+                     IsReadOnly="True"
+                     VerticalContentAlignment="Center"
+                     Padding="3,2"
+                     Margin="0,2"/>
+        </DockPanel>
+
+        <Label Grid.Row="5" Grid.Column="0" Content="Direct reports:"
+               VerticalAlignment="Top"
+               Margin="0,4,0,0"/>
+        <Border Grid.Row="5" Grid.Column="1"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="1"
+                Height="120">
+            <ListBox BorderThickness="0"/>
+        </Border>
+    </Grid>
+</UserControl>
