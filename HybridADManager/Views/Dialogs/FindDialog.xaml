@@ -49,7 +49,9 @@
                     <TextBox Text="{Binding SearchName, UpdateSourceTrigger=PropertyChanged}"
                              Width="200"
                              VerticalContentAlignment="Center"
-                             Padding="4,2"/>
+                             Padding="4,2"
+                             AutomationProperties.Name="Search Name"
+                             ToolTip="Search by name"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,4">
@@ -57,7 +59,9 @@
                     <TextBox Text="{Binding SearchEmail, UpdateSourceTrigger=PropertyChanged}"
                              Width="200"
                              VerticalContentAlignment="Center"
-                             Padding="4,2"/>
+                             Padding="4,2"
+                             AutomationProperties.Name="Search Email"
+                             ToolTip="Search by email"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="0,0,8,4">
@@ -65,7 +69,9 @@
                     <TextBox Text="{Binding SearchDescription, UpdateSourceTrigger=PropertyChanged}"
                              Width="200"
                              VerticalContentAlignment="Center"
-                             Padding="4,2"/>
+                             Padding="4,2"
+                             AutomationProperties.Name="Search Description"
+                             ToolTip="Search by description"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,4">
@@ -73,7 +79,9 @@
                     <TextBox Text="{Binding SearchPhone, UpdateSourceTrigger=PropertyChanged}"
                              Width="200"
                              VerticalContentAlignment="Center"
-                             Padding="4,2"/>
+                             Padding="4,2"
+                             AutomationProperties.Name="Search Phone"
+                             ToolTip="Search by phone"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
@@ -83,10 +91,14 @@
                     <Button Content="Find Now"
                             Width="75" Height="23"
                             Margin="0,0,6,0"
-                            Command="{Binding SearchCommand}"/>
+                            Command="{Binding SearchCommand}"
+                            AutomationProperties.Name="Find Now"
+                            ToolTip="Start search"/>
                     <Button Content="Clear"
                             Width="75" Height="23"
-                            Command="{Binding ClearCommand}"/>
+                            Command="{Binding ClearCommand}"
+                            AutomationProperties.Name="Clear Search"
+                            ToolTip="Clear search criteria"/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -100,7 +112,9 @@
             <ListView ItemsSource="{Binding Results}"
                       SelectedItem="{Binding SelectedResult}"
                       AlternationCount="2"
-                      MouseDoubleClick="ResultsListView_MouseDoubleClick">
+                      MouseDoubleClick="ResultsListView_MouseDoubleClick"
+                      AutomationProperties.Name="Search Results"
+                      ToolTip="Search results">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name" Width="200">
@@ -151,7 +165,9 @@
                     Content="Close"
                     Width="75" Height="23"
                     Margin="8,0,0,0"
-                    IsCancel="True"/>
+                    IsCancel="True"
+                    AutomationProperties.Name="Close"
+                    ToolTip="Close dialog"/>
         </Grid>
     </Grid>
 </Window>

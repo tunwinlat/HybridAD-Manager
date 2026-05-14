@@ -1,6 +1,7 @@
 <UserControl x:Class="HybridADManager.Views.PropertySheets.Tabs.LicensesTab"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             AutomationProperties.Name="Licenses Tab">
 
     <Grid Margin="12">
         <Grid.RowDefinitions>
@@ -80,7 +81,9 @@
                                                   Command="{Binding DataContext.ToggleLicenseCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                   CommandParameter="{Binding}"
                                                   VerticalAlignment="Center"
-                                                  FontWeight="SemiBold"/>
+                                                  FontWeight="SemiBold"
+                                                  AutomationProperties.Name="License Assignment"
+                                                  ToolTip="Toggle license assignment"/>
 
                                         <TextBlock Grid.Column="2"
                                                    VerticalAlignment="Center"
@@ -156,6 +159,8 @@
                 HorizontalAlignment="Right"
                 Width="75"
                 Height="23"
-                Margin="0,8,0,0"/>
+                Margin="0,8,0,0"
+                AutomationProperties.Name="Refresh Licenses"
+                ToolTip="Reload license data"/>
     </Grid>
 </UserControl>

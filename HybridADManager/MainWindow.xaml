@@ -13,50 +13,63 @@
         <vm:MainWindowViewModel/>
     </Window.DataContext>
 
+    <Window.InputBindings>
+        <KeyBinding Key="F5" Command="{Binding RefreshCommand}"/>
+        <KeyBinding Key="F3" Command="{Binding FindCommand}"/>
+        <KeyBinding Key="N" Modifiers="Control" Command="{Binding NewUserCommand}"/>
+        <KeyBinding Key="G" Modifiers="Control" Command="{Binding NewGroupCommand}"/>
+        <KeyBinding Key="E" Modifiers="Control" Command="{Binding ExportCommand}"/>
+        <KeyBinding Key="Delete" Command="{Binding DeleteCommand}"/>
+    </Window.InputBindings>
+
     <DockPanel>
         <!-- Menu Bar -->
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="Add _Domain..."/>
-                <MenuItem Header="Change _Domain..."/>
+                <MenuItem Header="Add _Domain..." AutomationProperties.Name="Add Domain"/>
+                <MenuItem Header="Change _Domain..." AutomationProperties.Name="Change Domain"/>
                 <Separator/>
-                <MenuItem Header="Export to _CSV..." Command="{Binding ExportCommand}"/>
+                <MenuItem Header="Export to _CSV..." Command="{Binding ExportCommand}" InputGestureText="Ctrl+E" AutomationProperties.Name="Export to CSV"/>
                 <Separator/>
-                <MenuItem Header="E_xit"/>
+                <MenuItem Header="E_xit" AutomationProperties.Name="Exit"/>
             </MenuItem>
             <MenuItem Header="_Action">
                 <MenuItem Header="_New">
-                    <MenuItem Header="_User" Command="{Binding NewUserCommand}"/>
-                    <MenuItem Header="_Group" Command="{Binding NewGroupCommand}"/>
-                    <MenuItem Header="_Organizational Unit"/>
-                    <MenuItem Header="_Computer"/>
-                    <MenuItem Header="_Contact"/>
+                    <MenuItem Header="_User" Command="{Binding NewUserCommand}" InputGestureText="Ctrl+N" AutomationProperties.Name="New User"/>
+                    <MenuItem Header="_Group" Command="{Binding NewGroupCommand}" InputGestureText="Ctrl+G" AutomationProperties.Name="New Group"/>
+                    <MenuItem Header="_Organizational Unit" AutomationProperties.Name="New Organizational Unit"/>
+                    <MenuItem Header="_Computer" AutomationProperties.Name="New Computer"/>
+                    <MenuItem Header="_Contact" AutomationProperties.Name="New Contact"/>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="_Find..." Command="{Binding FindCommand}" InputGestureText="Ctrl+F"/>
+                <MenuItem Header="_Find..." Command="{Binding FindCommand}" InputGestureText="F3" AutomationProperties.Name="Find"/>
                 <Separator/>
-                <MenuItem Header="_Delete" Command="{Binding DeleteCommand}"/>
-                <MenuItem Header="_Rename"/>
-                <MenuItem Header="_Move..."/>
+                <MenuItem Header="_Delete" Command="{Binding DeleteCommand}" InputGestureText="Del" AutomationProperties.Name="Delete"/>
+                <MenuItem Header="_Rename" AutomationProperties.Name="Rename"/>
+                <MenuItem Header="_Move..." AutomationProperties.Name="Move"/>
                 <Separator/>
-                <MenuItem Header="_Properties" Command="{Binding PropertiesCommand}"/>
+                <MenuItem Header="_Refresh" Command="{Binding RefreshCommand}" InputGestureText="F5" AutomationProperties.Name="Refresh"/>
+                <Separator/>
+                <MenuItem Header="_Properties" Command="{Binding PropertiesCommand}" AutomationProperties.Name="Properties"/>
             </MenuItem>
             <MenuItem Header="_View">
-                <MenuItem Header="_Customize Columns..."/>
-                <MenuItem Header="_Filter Options..."/>
+                <MenuItem Header="_Customize Columns..." AutomationProperties.Name="Customize Columns"/>
+                <MenuItem Header="_Filter Options..." AutomationProperties.Name="Filter Options"/>
                 <Separator/>
-                <MenuItem Header="_Advanced Features" IsCheckable="True"/>
+                <MenuItem Header="_Advanced Features" IsCheckable="True" AutomationProperties.Name="Advanced Features"/>
+                <Separator/>
+                <MenuItem Header="_High Contrast" IsCheckable="True" Checked="HighContrast_Checked" Unchecked="HighContrast_Unchecked" AutomationProperties.Name="High Contrast"/>
             </MenuItem>
             <MenuItem Header="_Window">
-                <MenuItem Header="_New Window"/>
-                <MenuItem Header="_Cascade"/>
-                <MenuItem Header="Tile _Horizontally"/>
-                <MenuItem Header="Tile _Vertically"/>
+                <MenuItem Header="_New Window" AutomationProperties.Name="New Window"/>
+                <MenuItem Header="_Cascade" AutomationProperties.Name="Cascade"/>
+                <MenuItem Header="Tile _Horizontally" AutomationProperties.Name="Tile Horizontally"/>
+                <MenuItem Header="Tile _Vertically" AutomationProperties.Name="Tile Vertically"/>
             </MenuItem>
             <MenuItem Header="_Help">
-                <MenuItem Header="_Help Topics"/>
+                <MenuItem Header="_Help Topics" AutomationProperties.Name="Help Topics"/>
                 <Separator/>
-                <MenuItem Header="_About HybridAD-Manager"/>
+                <MenuItem Header="_About HybridAD-Manager" AutomationProperties.Name="About HybridAD Manager"/>
             </MenuItem>
         </Menu>
 
@@ -65,7 +78,8 @@
         <ToolBar>
             <Button Style="{StaticResource ToolbarButtonStyle}"
                     Command="{Binding NewUserCommand}"
-                    ToolTip="New User">
+                    ToolTip="New User (Ctrl+N)"
+                    AutomationProperties.Name="New User">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="➕" FontSize="14" Margin="0,0,4,0"/>
                     <TextBlock Text="New"/>
@@ -73,7 +87,8 @@
             </Button>
             <Button Style="{StaticResource ToolbarButtonStyle}"
                     Command="{Binding FindCommand}"
-                    ToolTip="Find (Ctrl+F)">
+                    ToolTip="Find (F3)"
+                    AutomationProperties.Name="Find">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="🔍" FontSize="14" Margin="0,0,4,0"/>
                     <TextBlock Text="Find"/>
@@ -82,7 +97,8 @@
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
             <Button Style="{StaticResource ToolbarButtonStyle}"
                     Command="{Binding DeleteCommand}"
-                    ToolTip="Delete">
+                    ToolTip="Delete (Del)"
+                    AutomationProperties.Name="Delete">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="🗑" FontSize="14" Margin="0,0,4,0"/>
                     <TextBlock Text="Delete"/>
@@ -90,7 +106,8 @@
             </Button>
             <Button Style="{StaticResource ToolbarButtonStyle}"
                     Command="{Binding RefreshCommand}"
-                    ToolTip="Refresh (F5)">
+                    ToolTip="Refresh (F5)"
+                    AutomationProperties.Name="Refresh">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="🔄" FontSize="14" Margin="0,0,4,0"/>
                     <TextBlock Text="Refresh"/>
@@ -99,7 +116,8 @@
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
             <Button Style="{StaticResource ToolbarButtonStyle}"
                     Command="{Binding PropertiesCommand}"
-                    ToolTip="Properties">
+                    ToolTip="Properties"
+                    AutomationProperties.Name="Properties">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="📋" FontSize="14" Margin="0,0,4,0"/>
                     <TextBlock Text="Properties"/>
@@ -108,7 +126,8 @@
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
             <Button Style="{StaticResource ToolbarButtonStyle}"
                     Command="{Binding ExportCommand}"
-                    ToolTip="Export to CSV">
+                    ToolTip="Export to CSV (Ctrl+E)"
+                    AutomationProperties.Name="Export to CSV">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="📊" FontSize="14" Margin="0,0,4,0"/>
                     <TextBlock Text="Export"/>
@@ -118,7 +137,8 @@
         <ToolBar Band="0" BandIndex="1">
             <Button Style="{StaticResource ToolbarButtonStyle}"
                     Command="{Binding ToggleAuthenticationCommand}"
-                    ToolTip="Sign in to Microsoft Entra ID">
+                    ToolTip="Sign in to Microsoft Entra ID"
+                    AutomationProperties.Name="Sign In">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding AuthButtonText}"/>
                 </StackPanel>

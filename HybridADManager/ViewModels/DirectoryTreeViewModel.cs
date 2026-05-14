@@ -344,6 +344,28 @@ public partial class DirectoryTreeViewModel : ObservableObject
     }
 
     [RelayCommand]
+    public async Task MoveObjectAsync(DirectoryObject? obj, DirectoryNode? targetNode)
+    {
+        if (obj == null || targetNode == null) return;
+        if (string.IsNullOrEmpty(obj.DistinguishedName) || string.IsNullOrEmpty(targetNode.DistinguishedName)) return;
+
+        var success = await _adService.MoveObjectAsync(obj.DistinguishedName, targetNode.DistinguishedName);
+        if (success)
+        {
+            // Refresh the tree and list
+            await LoadDomainAsync();
+            if (SelectedNode != null)
+            {
+                await ExpandNodeAsync(SelectedNode);
+            }
+        }
+        else
+        {
+            MessageBox.Show("Failed to move the object. Ensure you have sufficient permissions.", "Move Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    [RelayCommand]
     private void NewSavedQuery()
     {
         var dialog = new SavedQueryDialog

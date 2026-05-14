@@ -1,6 +1,7 @@
 <UserControl x:Class="HybridADManager.Views.PropertySheets.Tabs.ProfileTab"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             AutomationProperties.Name="Profile Tab">
 
     <Grid Margin="12">
         <Grid.RowDefinitions>
@@ -21,7 +22,9 @@
                  Text="{Binding User.ProfilePath, Mode=TwoWay}"
                  VerticalContentAlignment="Center"
                  Padding="3,2"
-                 Margin="0,2"/>
+                 Margin="0,2"
+                 AutomationProperties.Name="Profile Path"
+                 ToolTip="Path to user profile"/>
 
         <Label Grid.Row="1" Grid.Column="0" Content="Logon script:"
                VerticalAlignment="Center"/>
@@ -29,7 +32,9 @@
                  Text="{Binding User.LogonScript, Mode=TwoWay}"
                  VerticalContentAlignment="Center"
                  Padding="3,2"
-                 Margin="0,2"/>
+                 Margin="0,2"
+                 AutomationProperties.Name="Logon Script"
+                 ToolTip="Logon script path"/>
 
         <Label Grid.Row="2" Grid.Column="0" Content="Local path:"
                VerticalAlignment="Center"/>
@@ -37,13 +42,17 @@
                  Text="{Binding User.HomeDirectory, Mode=TwoWay}"
                  VerticalContentAlignment="Center"
                  Padding="3,2"
-                 Margin="0,2"/>
+                 Margin="0,2"
+                 AutomationProperties.Name="Local Path"
+                 ToolTip="Home directory local path"/>
 
         <Label Grid.Row="3" Grid.Column="0" Content="Connect:"
                VerticalAlignment="Center"/>
         <ComboBox Grid.Row="3" Grid.Column="1"
                   Text="{Binding User.HomeDrive, Mode=TwoWay}"
                   VerticalContentAlignment="Center"
-                  Margin="0,2"/>
+                  Margin="0,2"
+                  AutomationProperties.Name="Connect Drive"
+                  ToolTip="Home drive letter"/>
     </Grid>
 </UserControl>

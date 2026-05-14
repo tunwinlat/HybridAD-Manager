@@ -1,6 +1,7 @@
 <UserControl x:Class="HybridADManager.Views.PropertySheets.Tabs.AccountTab"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             AutomationProperties.Name="Account Tab">
 
     <Grid Margin="12">
         <Grid.RowDefinitions>
@@ -26,13 +27,17 @@
                      Width="200"
                      VerticalContentAlignment="Center"
                      Padding="3,2"
-                     Margin="0,2"/>
+                     Margin="0,2"
+                     AutomationProperties.Name="User Logon Name"
+                     ToolTip="User logon name"/>
             <Label Content="@"
                    VerticalAlignment="Center"
                    Margin="2,0"/>
             <ComboBox Width="150"
                       VerticalContentAlignment="Center"
-                      Margin="0,2"/>
+                      Margin="0,2"
+                      AutomationProperties.Name="Logon Domain"
+                      ToolTip="Domain suffix"/>
         </StackPanel>
 
         <!-- Pre-Win2000 -->
@@ -41,7 +46,9 @@
         <TextBox Grid.Row="1" Grid.Column="1"
                  VerticalContentAlignment="Center"
                  Padding="3,2"
-                 Margin="0,2"/>
+                 Margin="0,2"
+                 AutomationProperties.Name="Pre-Windows 2000 Logon Name"
+                 ToolTip="User logon name pre-Windows 2000"/>
 
         <Separator Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                    Margin="0,8"/>
@@ -53,40 +60,52 @@
             <StackPanel Margin="8">
                 <CheckBox Content="User must change password at next logon"
                           IsChecked="{Binding User.MustChangePasswordAtNextLogon, Mode=TwoWay}"
-                          Margin="0,2"/>
+                          Margin="0,2"
+                          AutomationProperties.Name="User must change password at next logon"/>
                 <CheckBox Content="User cannot change password"
                           IsChecked="{Binding User.CannotChangePassword, Mode=TwoWay}"
-                          Margin="0,2"/>
+                          Margin="0,2"
+                          AutomationProperties.Name="User cannot change password"/>
                 <CheckBox Content="Password never expires"
                           IsChecked="{Binding User.PasswordNeverExpires, Mode=TwoWay}"
-                          Margin="0,2"/>
+                          Margin="0,2"
+                          AutomationProperties.Name="Password never expires"/>
                 <CheckBox Content="Store password using reversible encryption"
                           IsChecked="{Binding User.ReversibleEncryption, Mode=TwoWay}"
-                          Margin="0,2"/>
+                          Margin="0,2"
+                          AutomationProperties.Name="Store password using reversible encryption"/>
                 <CheckBox Content="Account is disabled"
                           IsChecked="{Binding User.IsEnabled, Mode=TwoWay, Converter={StaticResource InverseBoolConverter}}"
-                          Margin="0,2"/>
+                          Margin="0,2"
+                          AutomationProperties.Name="Account is disabled"/>
                 <CheckBox Content="Smart card is required for interactive logon"
                           IsChecked="{Binding User.SmartCardRequired, Mode=TwoWay}"
-                          Margin="0,2"/>
+                          Margin="0,2"
+                          AutomationProperties.Name="Smart card is required for interactive logon"/>
                 <CheckBox Content="Account is trusted for delegation"
                           IsChecked="{Binding User.TrustedForDelegation, Mode=TwoWay}"
-                          Margin="0,2"/>
+                          Margin="0,2"
+                          AutomationProperties.Name="Account is trusted for delegation"/>
                 <CheckBox Content="Account is sensitive and cannot be delegated"
                           IsChecked="{Binding User.SensitiveForDelegation, Mode=TwoWay}"
-                          Margin="0,2"/>
+                          Margin="0,2"
+                          AutomationProperties.Name="Account is sensitive and cannot be delegated"/>
                 <CheckBox Content="Use Kerberos DES encryption types for this account"
                           IsChecked="{Binding User.KerberosDes, Mode=TwoWay}"
-                          Margin="0,2"/>
+                          Margin="0,2"
+                          AutomationProperties.Name="Use Kerberos DES encryption types for this account"/>
                 <CheckBox Content="This account supports Kerberos AES 128 bit encryption"
                           IsChecked="{Binding User.KerberosAes128, Mode=TwoWay}"
-                          Margin="0,2"/>
+                          Margin="0,2"
+                          AutomationProperties.Name="This account supports Kerberos AES 128 bit encryption"/>
                 <CheckBox Content="This account supports Kerberos AES 256 bit encryption"
                           IsChecked="{Binding User.KerberosAes256, Mode=TwoWay}"
-                          Margin="0,2"/>
+                          Margin="0,2"
+                          AutomationProperties.Name="This account supports Kerberos AES 256 bit encryption"/>
                 <CheckBox Content="Do not require Kerberos preauthentication"
                           IsChecked="{Binding User.NoPreauth, Mode=TwoWay}"
-                          Margin="0,2"/>
+                          Margin="0,2"
+                          AutomationProperties.Name="Do not require Kerberos preauthentication"/>
             </StackPanel>
         </GroupBox>
 
@@ -95,10 +114,12 @@
                   Header="Account expires"
                   Margin="0,4">
             <StackPanel Margin="8" Orientation="Horizontal">
-                <RadioButton Content="Never" IsChecked="True" Margin="0,0,16,0"/>
-                <RadioButton Content="End of:" Margin="0,0,6,0"/>
+                <RadioButton Content="Never" IsChecked="True" Margin="0,0,16,0" AutomationProperties.Name="Never expire"/>
+                <RadioButton Content="End of:" Margin="0,0,6,0" AutomationProperties.Name="End of date"/>
                 <DatePicker SelectedDate="{Binding User.AccountExpires, Mode=TwoWay}"
-                           VerticalContentAlignment="Center"/>
+                           VerticalContentAlignment="Center"
+                           AutomationProperties.Name="Account Expiration Date"
+                           ToolTip="Account expiration date"/>
             </StackPanel>
         </GroupBox>
 
@@ -112,7 +133,9 @@
                        VerticalAlignment="Center"/>
             <Button Content="Unlock Account"
                     Margin="8,0,0,0"
-                    Padding="8,2"/>
+                    Padding="8,2"
+                    AutomationProperties.Name="Unlock Account"
+                    ToolTip="Unlock the user account"/>
         </StackPanel>
     </Grid>
 </UserControl>

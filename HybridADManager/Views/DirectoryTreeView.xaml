@@ -8,8 +8,13 @@
     <Grid>
         <TreeView ItemsSource="{Binding Nodes}"
                   SelectedItemChanged="TreeView_SelectedItemChanged"
+                  AllowDrop="True"
+                  DragOver="TreeView_DragOver"
+                  Drop="TreeView_Drop"
                   VirtualizingStackPanel.IsVirtualizing="True"
-                  VirtualizingStackPanel.VirtualizationMode="Recycling">
+                  VirtualizingStackPanel.VirtualizationMode="Recycling"
+                  AutomationProperties.Name="Directory Tree"
+                  ToolTip="Domain and organizational unit tree">
             <TreeView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="New Saved Query..." Command="{Binding NewSavedQueryCommand}"/>

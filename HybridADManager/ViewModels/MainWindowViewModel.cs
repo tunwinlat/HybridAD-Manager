@@ -119,6 +119,10 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private void Refresh()
     {
+        if (TreeViewModel.SelectedNode != null)
+        {
+            ListViewModel.LoadObjectsForNode(TreeViewModel.SelectedNode);
+        }
         TreeViewModel.RefreshDomain();
     }
 
@@ -136,19 +140,19 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private void NewUser()
     {
-        // TODO: Open New User dialog
+        MessageBox.Show("New user creation will be implemented in a future update.", "New User", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     [RelayCommand]
     private void NewGroup()
     {
-        // TODO: Open New Group dialog
+        MessageBox.Show("New group creation will be implemented in a future update.", "New Group", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     [RelayCommand]
     private void Delete()
     {
-        // TODO: Confirm and delete selected objects
+        ListViewModel.DeleteSelectedCommand.Execute(null);
     }
 
     [RelayCommand]

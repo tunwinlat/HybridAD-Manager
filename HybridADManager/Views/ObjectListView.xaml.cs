@@ -1,6 +1,8 @@
 using HybridADManager.Models;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace HybridADManager.Views;
 
@@ -31,5 +33,27 @@ public partial class ObjectListView : UserControl
             }
             vm.SelectedCount = ListView.SelectedItems.Count;
         }
+    }
+
+    private void ListView_PreviewMouseMove(object sender, MouseEventArgs e)
+    {
+        if (e.LeftButton == MouseButtonState.Pressed && sender is ListView listView)
+        {
+            var item = FindAncestor<ListViewItem>((DependencyObject)e.OriginalSource);
+            if (item != null && item.DataContext is Models.DirectoryObject obj)
+            {
+                DragDrop.DoDragDrop(listView, obj, DragDropEffects.Move);
+            }
+        }
+    }
+
+    private static T? FindAncestor<T>(DependencyObject current) where T : DependencyObject
+    {
+        while (current != null)
+        {
+            if (current is T ancestor) return ancestor;
+            current = VisualTreeHelper.GetParent(current);
+        }
+        return null;
     }
 }

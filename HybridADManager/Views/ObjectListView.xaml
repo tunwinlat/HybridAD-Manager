@@ -23,7 +23,9 @@
                          Width="200"
                          Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                          VerticalContentAlignment="Center"
-                         Padding="4,2"/>
+                         Padding="4,2"
+                         AutomationProperties.Name="Quick Search"
+                         ToolTip="Filter objects by name, email, or description"/>
             </StackPanel>
         </Border>
 
@@ -35,7 +37,10 @@
                   SelectionMode="Extended"
                   AlternationCount="2"
                   MouseDoubleClick="ListView_MouseDoubleClick"
-                  SelectionChanged="ListView_SelectionChanged">
+                  PreviewMouseMove="ListView_PreviewMouseMove"
+                  SelectionChanged="ListView_SelectionChanged"
+                  AutomationProperties.Name="Object List"
+                  ToolTip="List of directory objects">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Name" Width="220">

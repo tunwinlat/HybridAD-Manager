@@ -29,7 +29,9 @@
             <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                      Width="300"
                      VerticalContentAlignment="Center"
-                     Padding="4,2"/>
+                     Padding="4,2"
+                     AutomationProperties.Name="Query Name"
+                     ToolTip="Saved query name"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,4">
@@ -37,7 +39,9 @@
             <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                      Width="300"
                      VerticalContentAlignment="Center"
-                     Padding="4,2"/>
+                     Padding="4,2"
+                     AutomationProperties.Name="Query Description"
+                     ToolTip="Saved query description"/>
         </StackPanel>
 
         <Separator Grid.Row="2" Margin="0,4"/>
@@ -47,7 +51,9 @@
             <TextBox Text="{Binding FilterName, UpdateSourceTrigger=PropertyChanged}"
                      Width="300"
                      VerticalContentAlignment="Center"
-                     Padding="4,2"/>
+                     Padding="4,2"
+                     AutomationProperties.Name="Name Filter"
+                     ToolTip="Filter by name"/>
         </StackPanel>
 
         <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,0,0,4">
@@ -55,7 +61,9 @@
             <TextBox Text="{Binding FilterEmail, UpdateSourceTrigger=PropertyChanged}"
                      Width="300"
                      VerticalContentAlignment="Center"
-                     Padding="4,2"/>
+                     Padding="4,2"
+                     AutomationProperties.Name="Email Filter"
+                     ToolTip="Filter by email"/>
         </StackPanel>
 
         <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="0,0,0,4">
@@ -63,7 +71,9 @@
             <TextBox Text="{Binding FilterDescription, UpdateSourceTrigger=PropertyChanged}"
                      Width="300"
                      VerticalContentAlignment="Center"
-                     Padding="4,2"/>
+                     Padding="4,2"
+                     AutomationProperties.Name="Description Filter"
+                     ToolTip="Filter by description"/>
         </StackPanel>
 
         <StackPanel Grid.Row="6" Orientation="Horizontal" Margin="0,0,0,4">
@@ -71,7 +81,9 @@
             <TextBox Text="{Binding FilterPhone, UpdateSourceTrigger=PropertyChanged}"
                      Width="300"
                      VerticalContentAlignment="Center"
-                     Padding="4,2"/>
+                     Padding="4,2"
+                     AutomationProperties.Name="Phone Filter"
+                     ToolTip="Filter by phone"/>
         </StackPanel>
 
         <StackPanel Grid.Row="7"
@@ -83,10 +95,14 @@
                     Width="75" Height="23"
                     Margin="0,0,6,0"
                     IsDefault="True"
-                    Command="{Binding SaveCommand}"/>
+                    Command="{Binding SaveCommand}"
+                    AutomationProperties.Name="Save Query"
+                    ToolTip="Save query"/>
             <Button Content="Cancel"
                     Width="75" Height="23"
-                    IsCancel="True"/>
+                    IsCancel="True"
+                    AutomationProperties.Name="Cancel"
+                    ToolTip="Cancel"/>
         </StackPanel>
     </Grid>
 </Window>
