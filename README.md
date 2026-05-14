@@ -67,6 +67,15 @@ No more context-switching between ADUC, the M365 Admin Center, and the Exchange 
 - **CSV Export** — Export objects or container to CSV with full field coverage
 - **Force Sync** — Attempts `Start-ADSyncSyncCycle` via PowerShell when on AAD Connect server
 
+### Polish & Accessibility
+- **Keyboard Shortcuts** — F5 Refresh, F3 Find, Ctrl+N New User, Ctrl+E Export, Del Delete, Enter Properties
+- **Drag-and-Drop** — Move users/groups between OUs by dragging from list to tree
+- **Accessibility** — ~160 `AutomationProperties.Name` labels, ToolTips on all interactive elements
+- **High-Contrast Theme** — Runtime toggle via View menu
+- **MSIX Packaging** — `Package.appxmanifest`, publish-ready `.csproj`, image asset placeholders
+- **Global Exception Handling** — `DispatcherUnhandledException` handler with user-friendly dialogs
+- **Dialog Service** — Centralized `IDialogService` for consistent info/warning/error display
+
 ### Search & Operations
 - Quick search filter in list view
 - Graceful fallback to demo `contoso.com` data when AD is unavailable
@@ -177,7 +186,7 @@ HybridADManager/
 | Phase 3 | ✅ Complete | Entra ID Integration |
 | Phase 4 | ✅ Complete | Cloud Management Tabs (Licenses, Mailbox, Email Addresses) |
 | Phase 5 | ✅ Complete | Search / Saved Queries, Bulk Operations, Force Sync, Export |
-| Phase 6 | 📋 Planned | Keyboard Shortcuts, Drag-and-Drop, Accessibility, MSIX Packaging |
+| Phase 6 | ✅ Complete | Keyboard Shortcuts, Drag-and-Drop, Accessibility, MSIX Packaging |
 
 ---
 
