@@ -1,0 +1,59 @@
+<UserControl x:Class="HybridADManager.Views.PropertySheets.Tabs.DialInTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+               Content="Network Access Permission"
+               FontWeight="SemiBold"
+               VerticalAlignment="Center"/>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="8,0">
+            <RadioButton Content="Allow access"
+                         Margin="0,2"/>
+            <RadioButton Content="Deny access"
+                         Margin="0,2"/>
+            <RadioButton Content="Control access through NPS Network Policy"
+                         IsChecked="True"
+                         Margin="0,2"/>
+        </StackPanel>
+
+        <Separator Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                   Margin="0,8"/>
+
+        <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+               Content="Callback Options"
+               FontWeight="SemiBold"
+               VerticalAlignment="Center"/>
+
+        <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="8,0">
+            <RadioButton Content="No callback"
+                         Margin="0,2"/>
+            <RadioButton Content="Set by caller"
+                         Margin="0,2"/>
+            <StackPanel Orientation="Horizontal" Margin="0,2">
+                <RadioButton Content="Always callback to:"
+                             VerticalAlignment="Center"
+                             Margin="0,0,6,0"/>
+                <TextBox Text="{Binding User.CallbackNumber, Mode=TwoWay}"
+                         Width="150"
+                         VerticalContentAlignment="Center"
+                         Padding="3,2"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

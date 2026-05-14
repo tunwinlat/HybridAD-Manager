@@ -16,6 +16,26 @@ public interface IGraphService
     Task RemoveLicenseAsync(string userId, IEnumerable<string> skuIds);
     Task ForceSyncAsync();
     Task<HybridSyncState> GetSyncStateAsync(string userId);
+    Task<MailboxSettings?> GetMailboxSettingsAsync(string userId);
+    Task UpdateMailboxSettingsAsync(string userId, MailboxSettings settings);
+    Task UpdateUserProxyAddressesAsync(string userId, List<string> proxyAddresses, string? primarySmtp);
+}
+
+public class MailboxSettings
+{
+    public AutomaticRepliesSetting? AutomaticRepliesSetting { get; set; }
+    public string? ForwardingSmtpAddress { get; set; }
+    public string? ExternalAudience { get; set; }
+    public string? UserPurpose { get; set; }
+}
+
+public class AutomaticRepliesSetting
+{
+    public string Status { get; set; } = "disabled";
+    public string? ScheduledStartDateTime { get; set; }
+    public string? ScheduledEndDateTime { get; set; }
+    public string? InternalReplyMessage { get; set; }
+    public string? ExternalReplyMessage { get; set; }
 }
 
 public class HybridSyncState

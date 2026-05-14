@@ -68,7 +68,8 @@ public class GraphService : IGraphService
                         "onPremisesImmutableId", "onPremisesDistinguishedName", "onPremisesDomainName",
                         "onPremisesSamAccountName", "onPremisesSecurityIdentifier", "onPremisesSyncEnabled",
                         "lastPasswordChangeDateTime", "accountEnabled", "createdDateTime",
-                        "onPremisesProvisioningErrors"
+                        "proxyAddresses", "mail",
+                        "onPremisesProvisioningErrors", "proxyAddresses", "mail"
                     };
                 });
 
@@ -206,7 +207,7 @@ public class GraphService : IGraphService
                     SkuId = sku.SkuId.ToString()!,
                     SkuPartNumber = sku.SkuPartNumber,
                     DisplayName = GetFriendlySkuName(sku.SkuPartNumber),
-                    TotalUnits = sku.PrepaidUnits?.Enabled ?? 0 + (sku.PrepaidUnits?.Suspended ?? 0),
+                    TotalUnits = (sku.PrepaidUnits?.Enabled ?? 0) + (sku.PrepaidUnits?.Suspended ?? 0),
                     ConsumedUnits = (int)(sku.ConsumedUnits ?? 0),
                     ServicePlans = sku.ServicePlans?.Select(sp => new ServicePlan
                     {
@@ -292,6 +293,81 @@ public class GraphService : IGraphService
         await Task.Delay(100);
     }
 
+    public async Task<MailboxSettings?> GetMailboxSettingsAsync(string userId)
+    {
+        if (_graphClient == null) return null;
+
+        try
+        {
+            var settings = await _graphClient.Users[userId].MailboxSettings.GetAsync();
+            if (settings == null) return null;
+
+            return new MailboxSettings
+            {
+                AutomaticRepliesSetting = settings.AutomaticRepliesSetting == null ? null : new AutomaticRepliesSetting
+                {
+                    Status = settings.AutomaticRepliesSetting.Status?.ToString()?.ToLowerInvariant() ?? "disabled",
+                    ScheduledStartDateTime = settings.AutomaticRepliesSetting.ScheduledStartDateTime?.DateTime.ToString("o"),
+                    ScheduledEndDateTime = settings.AutomaticRepliesSetting.ScheduledEndDateTime?.DateTime.ToString("o"),
+                    InternalReplyMessage = settings.AutomaticRepliesSetting.InternalReplyMessage,
+                    ExternalReplyMessage = settings.AutomaticRepliesSetting.ExternalReplyMessage
+                },
+                ForwardingSmtpAddress = settings.ForwardingSmtpAddress,
+                ExternalAudience = settings.AutomaticRepliesSetting?.ExternalAudience?.ToString()
+            };
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    public async Task UpdateMailboxSettingsAsync(string userId, MailboxSettings settings)
+    {
+        if (_graphClient == null) return;
+
+        var requestBody = new Microsoft.Graph.Models.MailboxSettings
+        {
+            AutomaticRepliesSetting = settings.AutomaticRepliesSetting == null ? null : new Microsoft.Graph.Models.AutomaticRepliesSetting
+            {
+                Status = settings.AutomaticRepliesSetting.Status?.ToLowerInvariant() switch
+                {
+                    "alwaysenabled" => Microsoft.Graph.Models.AutomaticRepliesStatus.AlwaysEnabled,
+                    "scheduled" => Microsoft.Graph.Models.AutomaticRepliesStatus.Scheduled,
+                    _ => Microsoft.Graph.Models.AutomaticRepliesStatus.Disabled
+                },
+                ExternalAudience = settings.ExternalAudience?.ToLowerInvariant() switch
+                {
+                    "none" => Microsoft.Graph.Models.ExternalAudienceScope.None,
+                    "known" => Microsoft.Graph.Models.ExternalAudienceScope.Known,
+                    _ => Microsoft.Graph.Models.ExternalAudienceScope.All
+                },
+                InternalReplyMessage = settings.AutomaticRepliesSetting.InternalReplyMessage,
+                ExternalReplyMessage = settings.AutomaticRepliesSetting.ExternalReplyMessage
+            },
+            ForwardingSmtpAddress = settings.ForwardingSmtpAddress
+        };
+
+        await _graphClient.Users[userId].MailboxSettings.PatchAsync(requestBody);
+    }
+
+    public async Task UpdateUserProxyAddressesAsync(string userId, List<string> proxyAddresses, string? primarySmtp)
+    {
+        if (_graphClient == null) return;
+
+        var requestBody = new Microsoft.Graph.Models.User
+        {
+            ProxyAddresses = proxyAddresses
+        };
+
+        if (!string.IsNullOrEmpty(primarySmtp))
+        {
+            requestBody.Mail = primarySmtp;
+        }
+
+        await _graphClient.Users[userId].PatchAsync(requestBody);
+    }
+
     public async Task<HybridSyncState> GetSyncStateAsync(string userId)
     {
         var state = new HybridSyncState();
@@ -356,6 +432,7 @@ public class GraphService : IGraphService
             Company = user.CompanyName ?? "",
             Office = user.OfficeLocation ?? "",
             Telephone = user.BusinessPhones?.FirstOrDefault() ?? "",
+            ProxyAddresses = new System.Collections.ObjectModel.ObservableCollection<string>(user.ProxyAddresses ?? new List<string>()),
             IsEnabled = user.AccountEnabled ?? true,
             EntraObjectId = user.Id,
             ImmutableId = user.OnPremisesImmutableId,

@@ -55,28 +55,37 @@
                           IsChecked="{Binding User.MustChangePasswordAtNextLogon, Mode=TwoWay}"
                           Margin="0,2"/>
                 <CheckBox Content="User cannot change password"
+                          IsChecked="{Binding User.CannotChangePassword, Mode=TwoWay}"
                           Margin="0,2"/>
                 <CheckBox Content="Password never expires"
                           IsChecked="{Binding User.PasswordNeverExpires, Mode=TwoWay}"
                           Margin="0,2"/>
                 <CheckBox Content="Store password using reversible encryption"
+                          IsChecked="{Binding User.ReversibleEncryption, Mode=TwoWay}"
                           Margin="0,2"/>
                 <CheckBox Content="Account is disabled"
                           IsChecked="{Binding User.IsEnabled, Mode=TwoWay, Converter={StaticResource InverseBoolConverter}}"
                           Margin="0,2"/>
                 <CheckBox Content="Smart card is required for interactive logon"
+                          IsChecked="{Binding User.SmartCardRequired, Mode=TwoWay}"
                           Margin="0,2"/>
                 <CheckBox Content="Account is trusted for delegation"
+                          IsChecked="{Binding User.TrustedForDelegation, Mode=TwoWay}"
                           Margin="0,2"/>
                 <CheckBox Content="Account is sensitive and cannot be delegated"
+                          IsChecked="{Binding User.SensitiveForDelegation, Mode=TwoWay}"
                           Margin="0,2"/>
                 <CheckBox Content="Use Kerberos DES encryption types for this account"
+                          IsChecked="{Binding User.KerberosDes, Mode=TwoWay}"
                           Margin="0,2"/>
                 <CheckBox Content="This account supports Kerberos AES 128 bit encryption"
+                          IsChecked="{Binding User.KerberosAes128, Mode=TwoWay}"
                           Margin="0,2"/>
                 <CheckBox Content="This account supports Kerberos AES 256 bit encryption"
+                          IsChecked="{Binding User.KerberosAes256, Mode=TwoWay}"
                           Margin="0,2"/>
                 <CheckBox Content="Do not require Kerberos preauthentication"
+                          IsChecked="{Binding User.NoPreauth, Mode=TwoWay}"
                           Margin="0,2"/>
             </StackPanel>
         </GroupBox>

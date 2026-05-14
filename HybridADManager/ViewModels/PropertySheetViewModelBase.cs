@@ -73,6 +73,27 @@ public partial class UserPropertySheetViewModel : PropertySheetViewModelBase
     [ObservableProperty]
     private HybridStatusTabViewModel _hybridStatusTab;
 
+    [ObservableProperty]
+    private ProfileTabViewModel _profileTab;
+
+    [ObservableProperty]
+    private TelephonesTabViewModel _telephonesTab;
+
+    [ObservableProperty]
+    private DialInTabViewModel _dialInTab;
+
+    [ObservableProperty]
+    private EnvironmentTabViewModel _environmentTab;
+
+    [ObservableProperty]
+    private LicensesTabViewModel _licensesTab;
+
+    [ObservableProperty]
+    private MailboxTabViewModel _mailboxTab;
+
+    [ObservableProperty]
+    private EmailAddressesTabViewModel _emailAddressesTab;
+
     public UserPropertySheetViewModel(HybridUser user) : base(user)
     {
         var graphService = App.Current.Services.GetService(typeof(IGraphService)) as IGraphService
@@ -84,6 +105,13 @@ public partial class UserPropertySheetViewModel : PropertySheetViewModelBase
         OrganizationTab = new OrganizationTabViewModel(user);
         MemberOfTab = new MemberOfTabViewModel(user);
         HybridStatusTab = new HybridStatusTabViewModel(user, graphService);
+        ProfileTab = new ProfileTabViewModel(user);
+        TelephonesTab = new TelephonesTabViewModel(user);
+        DialInTab = new DialInTabViewModel(user);
+        EnvironmentTab = new EnvironmentTabViewModel(user);
+        LicensesTab = new LicensesTabViewModel(user, graphService);
+        MailboxTab = new MailboxTabViewModel(user, graphService);
+        EmailAddressesTab = new EmailAddressesTabViewModel(user, graphService);
     }
 
     public HybridUser User => (HybridUser)DirectoryObject;

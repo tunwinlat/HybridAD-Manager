@@ -17,16 +17,10 @@
         <Border Grid.Row="1"
                 BorderBrush="{StaticResource BorderBrush}"
                 BorderThickness="1">
-            <ListView ItemsSource="{Binding Groups}"
-                      AlternationCount="2">
+            <ListView ItemsSource="{Binding Groups}" AlternationCount="2">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Name" Width="250"
-                                        DisplayMemberBinding="{Binding}"/>
-                        <GridViewColumn Header="Active Directory Domain Services Folder" Width="*"
-                                        DisplayMemberBinding="{Binding}"/>
-                        <GridViewColumn Header="Type" Width="100"
-                                        DisplayMemberBinding="{Binding}"/>
+                        <GridViewColumn Header="Name" Width="*" DisplayMemberBinding="{Binding}"/>
                     </GridView>
                 </ListView.View>
             </ListView>

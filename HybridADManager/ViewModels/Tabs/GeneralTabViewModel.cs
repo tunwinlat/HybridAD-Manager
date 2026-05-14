@@ -39,6 +39,15 @@ public partial class AccountTabViewModel : ObservableObject
     public bool MustChangePassword => User.MustChangePasswordAtNextLogon;
     public DateTime? AccountExpires => User.AccountExpires;
     public DateTime? PasswordLastSet => User.PasswordLastSet;
+    public bool CannotChangePassword => User.CannotChangePassword;
+    public bool ReversibleEncryption => User.ReversibleEncryption;
+    public bool SmartCardRequired => User.SmartCardRequired;
+    public bool TrustedForDelegation => User.TrustedForDelegation;
+    public bool SensitiveForDelegation => User.SensitiveForDelegation;
+    public bool KerberosDes => User.KerberosDes;
+    public bool KerberosAes128 => User.KerberosAes128;
+    public bool KerberosAes256 => User.KerberosAes256;
+    public bool NoPreauth => User.NoPreauth;
 }
 
 public partial class AddressTabViewModel : ObservableObject
@@ -50,6 +59,12 @@ public partial class AddressTabViewModel : ObservableObject
     {
         _user = user;
     }
+
+    public string StreetAddress => User.StreetAddress;
+    public string City => User.City;
+    public string State => User.State;
+    public string PostalCode => User.PostalCode;
+    public string Country => User.Country;
 }
 
 public partial class OrganizationTabViewModel : ObservableObject
@@ -66,6 +81,7 @@ public partial class OrganizationTabViewModel : ObservableObject
     public string Department => User.Department;
     public string Company => User.Company;
     public string Manager => User.Manager;
+    public System.Collections.ObjectModel.ObservableCollection<string> DirectReports => User.DirectReports;
 }
 
 public partial class MemberOfTabViewModel : ObservableObject
@@ -73,19 +89,76 @@ public partial class MemberOfTabViewModel : ObservableObject
     [ObservableProperty]
     private HybridUser _user;
 
-    [ObservableProperty]
-    private System.Collections.ObjectModel.ObservableCollection<string> _groups = new();
-
     public MemberOfTabViewModel(HybridUser user)
     {
         _user = user;
-        LoadGroups();
     }
 
-    private async void LoadGroups()
+    public System.Collections.ObjectModel.ObservableCollection<string> Groups => User.MemberOf;
+}
+
+public partial class ProfileTabViewModel : ObservableObject
+{
+    [ObservableProperty]
+    private HybridUser _user;
+
+    public ProfileTabViewModel(HybridUser user)
     {
-        // TODO: Load from AD service
-        Groups.Add("Domain Users");
-        Groups.Add("All Users");
+        _user = user;
     }
+
+    public string ProfilePath => User.ProfilePath;
+    public string LogonScript => User.LogonScript;
+    public string HomeDirectory => User.HomeDirectory;
+    public string HomeDrive => User.HomeDrive;
+}
+
+public partial class TelephonesTabViewModel : ObservableObject
+{
+    [ObservableProperty]
+    private HybridUser _user;
+
+    public TelephonesTabViewModel(HybridUser user)
+    {
+        _user = user;
+    }
+
+    public string HomePhone => User.HomePhone;
+    public string MobilePhone => User.MobilePhone;
+    public string Pager => User.Pager;
+    public string Fax => User.Fax;
+    public string IpPhone => User.IpPhone;
+    public string Notes => User.Notes;
+}
+
+public partial class DialInTabViewModel : ObservableObject
+{
+    [ObservableProperty]
+    private HybridUser _user;
+
+    public DialInTabViewModel(HybridUser user)
+    {
+        _user = user;
+    }
+
+    public string DialinAccess => User.DialinAccess;
+    public bool CallbackRequired => User.CallbackRequired;
+    public string CallbackNumber => User.CallbackNumber;
+}
+
+public partial class EnvironmentTabViewModel : ObservableObject
+{
+    [ObservableProperty]
+    private HybridUser _user;
+
+    public EnvironmentTabViewModel(HybridUser user)
+    {
+        _user = user;
+    }
+
+    public string StartingProgram => User.StartingProgram;
+    public string StartIn => User.StartIn;
+    public bool ConnectClientDrives => User.ConnectClientDrives;
+    public bool ConnectClientPrinters => User.ConnectClientPrinters;
+    public bool DefaultToMainPrinter => User.DefaultToMainPrinter;
 }

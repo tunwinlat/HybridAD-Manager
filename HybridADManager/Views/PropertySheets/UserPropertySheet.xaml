@@ -34,20 +34,10 @@
                 <tabs:AccountTab DataContext="{Binding AccountTab}"/>
             </TabItem>
             <TabItem Header="Profile">
-                <Grid>
-                    <TextBlock Text="Profile settings will be implemented in a later phase."
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Foreground="{StaticResource ForegroundMutedBrush}"/>
-                </Grid>
+                <tabs:ProfileTab DataContext="{Binding ProfileTab}"/>
             </TabItem>
             <TabItem Header="Telephones">
-                <Grid>
-                    <TextBlock Text="Telephone settings will be implemented in a later phase."
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Foreground="{StaticResource ForegroundMutedBrush}"/>
-                </Grid>
+                <tabs:TelephonesTab DataContext="{Binding TelephonesTab}"/>
             </TabItem>
             <TabItem Header="Organization">
                 <tabs:OrganizationTab DataContext="{Binding OrganizationTab}"/>
@@ -56,20 +46,10 @@
                 <tabs:MemberOfTab DataContext="{Binding MemberOfTab}"/>
             </TabItem>
             <TabItem Header="Dial-in">
-                <Grid>
-                    <TextBlock Text="Dial-in settings will be implemented in a later phase."
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Foreground="{StaticResource ForegroundMutedBrush}"/>
-                </Grid>
+                <tabs:DialInTab DataContext="{Binding DialInTab}"/>
             </TabItem>
             <TabItem Header="Environment">
-                <Grid>
-                    <TextBlock Text="Environment settings will be implemented in a later phase."
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Foreground="{StaticResource ForegroundMutedBrush}"/>
-                </Grid>
+                <tabs:EnvironmentTab DataContext="{Binding EnvironmentTab}"/>
             </TabItem>
 
             <!-- Hybrid / Cloud Tabs -->
@@ -77,28 +57,13 @@
                 <tabs:HybridStatusTab DataContext="{Binding HybridStatusTab}"/>
             </TabItem>
             <TabItem Header="Licenses">
-                <Grid>
-                    <TextBlock Text="License management will be implemented in Phase 4."
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Foreground="{StaticResource ForegroundMutedBrush}"/>
-                </Grid>
+                <tabs:LicensesTab DataContext="{Binding LicensesTab}"/>
             </TabItem>
             <TabItem Header="Mailbox">
-                <Grid>
-                    <TextBlock Text="Mailbox management will be implemented in Phase 4."
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Foreground="{StaticResource ForegroundMutedBrush}"/>
-                </Grid>
+                <tabs:MailboxTab DataContext="{Binding MailboxTab}"/>
             </TabItem>
             <TabItem Header="Email Addresses">
-                <Grid>
-                    <TextBlock Text="Email address management will be implemented in Phase 4."
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Foreground="{StaticResource ForegroundMutedBrush}"/>
-                </Grid>
+                <tabs:EmailAddressesTab DataContext="{Binding EmailAddressesTab}"/>
             </TabItem>
         </TabControl>
 

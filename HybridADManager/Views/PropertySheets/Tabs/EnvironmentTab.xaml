@@ -1,0 +1,57 @@
+<UserControl x:Class="HybridADManager.Views.PropertySheets.Tabs.EnvironmentTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Content="Starting program:"
+               VerticalAlignment="Center"/>
+        <TextBox Grid.Row="0" Grid.Column="1"
+                 Text="{Binding User.StartingProgram, Mode=TwoWay}"
+                 VerticalContentAlignment="Center"
+                 Padding="3,2"
+                 Margin="0,2"/>
+
+        <Label Grid.Row="1" Grid.Column="0" Content="Start in:"
+               VerticalAlignment="Center"/>
+        <TextBox Grid.Row="1" Grid.Column="1"
+                 Text="{Binding User.StartIn, Mode=TwoWay}"
+                 VerticalContentAlignment="Center"
+                 Padding="3,2"
+                 Margin="0,2"/>
+
+        <Separator Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                   Margin="0,8"/>
+
+        <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+               Content="Client devices"
+               FontWeight="SemiBold"
+               VerticalAlignment="Center"/>
+
+        <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="8,0">
+            <CheckBox Content="Connect client drives at logon"
+                      IsChecked="{Binding User.ConnectClientDrives, Mode=TwoWay}"
+                      Margin="0,2"/>
+            <CheckBox Content="Connect client printers at logon"
+                      IsChecked="{Binding User.ConnectClientPrinters, Mode=TwoWay}"
+                      Margin="0,2"/>
+            <CheckBox Content="Default to main client printer"
+                      IsChecked="{Binding User.DefaultToMainPrinter, Mode=TwoWay}"
+                      Margin="0,2"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
