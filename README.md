@@ -55,10 +55,10 @@ No more context-switching between ADUC, the M365 Admin Center, and the Exchange 
 - **Hybrid Status tab** — Entra Object ID, Immutable ID, directory source, last sync time, sync errors
 - **Force Sync button** — Trigger Azure AD Connect delta sync
 
-### Cloud Management (In Progress)
-- **Licenses tab** — Visual SKU/service-plan grid with assign/remove (Phase 4)
-- **Mailbox tab** — Aliases, delegation, auto-reply, forwarding (Phase 4)
-- **Email Addresses tab** — `proxyAddresses` editor with validation (Phase 4)
+### Cloud Management
+- **Licenses tab** — Visual SKU/service-plan grid with assign/remove
+- **Mailbox tab** — Auto-reply editor, mail forwarding, address list visibility
+- **Email Addresses tab** — `proxyAddresses` editor with validation, primary SMTP management
 
 ### Search & Operations
 - Quick search filter in list view
@@ -168,8 +168,8 @@ HybridADManager/
 | Phase 1 | ✅ Complete | Foundation & Shell |
 | Phase 2 | ✅ Complete | Active Directory Integration |
 | Phase 3 | ✅ Complete | Entra ID Integration |
-| Phase 4 | 🚧 In Progress | Cloud Management Tabs (Licenses, Mailbox, Email Addresses) |
-| Phase 5 | 📋 Planned | Search / Saved Queries, Bulk Operations, Force Sync, Export |
+| Phase 4 | ✅ Complete | Cloud Management Tabs (Licenses, Mailbox, Email Addresses) |
+| Phase 5 | 🚧 In Progress | Search / Saved Queries, Bulk Operations, Force Sync, Export |
 | Phase 6 | 📋 Planned | Keyboard Shortcuts, Drag-and-Drop, Accessibility, MSIX Packaging |
 
 ---
