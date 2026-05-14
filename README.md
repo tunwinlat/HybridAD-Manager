@@ -61,6 +61,13 @@ No more context-switching between ADUC, the M365 Admin Center, and the Exchange 
 - **Email Addresses tab** — `proxyAddresses` editor with validation, primary SMTP management
 
 ### Search & Operations
+- **Find Dialog** — Global LDAP search across domain by name, email, description, phone
+- **Saved Queries** — Persist custom LDAP filters to JSON; appear in tree under "Saved Queries"
+- **Bulk Operations** — Multi-select enable/disable/delete; context menu on list view
+- **CSV Export** — Export objects or container to CSV with full field coverage
+- **Force Sync** — Attempts `Start-ADSyncSyncCycle` via PowerShell when on AAD Connect server
+
+### Search & Operations
 - Quick search filter in list view
 - Graceful fallback to demo `contoso.com` data when AD is unavailable
 - Bulk operations framework foundation
@@ -169,7 +176,7 @@ HybridADManager/
 | Phase 2 | ✅ Complete | Active Directory Integration |
 | Phase 3 | ✅ Complete | Entra ID Integration |
 | Phase 4 | ✅ Complete | Cloud Management Tabs (Licenses, Mailbox, Email Addresses) |
-| Phase 5 | 🚧 In Progress | Search / Saved Queries, Bulk Operations, Force Sync, Export |
+| Phase 5 | ✅ Complete | Search / Saved Queries, Bulk Operations, Force Sync, Export |
 | Phase 6 | 📋 Planned | Keyboard Shortcuts, Drag-and-Drop, Accessibility, MSIX Packaging |
 
 ---
