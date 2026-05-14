@@ -2,7 +2,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HybridADManager.Models;
 using HybridADManager.Services;
+using HybridADManager.Views.Dialogs;
 using HybridADManager.Views.PropertySheets;
+using Microsoft.Win32;
 using System.Windows;
 
 namespace HybridADManager.ViewModels;
@@ -123,7 +125,12 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private void Find()
     {
-        // TODO: Open Find dialog
+        var adService = App.Current.Services.GetService(typeof(IActiveDirectoryService)) as IActiveDirectoryService;
+        var domainName = TreeViewModel.Nodes.FirstOrDefault()?.DisplayName ?? "contoso.com";
+        var dialog = new FindDialog();
+        dialog.DataContext = new FindDialogViewModel(adService ?? new ActiveDirectoryService(), domainName);
+        dialog.Owner = Application.Current.MainWindow;
+        dialog.ShowDialog();
     }
 
     [RelayCommand]
@@ -151,6 +158,29 @@ public partial class MainWindowViewModel : ObservableObject
         if (selectedObject == null) return;
 
         OpenPropertySheet(selectedObject);
+    }
+
+    [RelayCommand]
+    private async Task ExportAsync()
+    {
+        var dialog = new SaveFileDialog
+        {
+            Filter = "CSV files (*.csv)|*.csv",
+            FileName = "ADObjects.csv"
+        };
+
+        if (dialog.ShowDialog() != true) return;
+
+        try
+        {
+            var objects = ListViewModel.FilteredObjects ?? ListViewModel.Objects;
+            await Infrastructure.Helpers.CsvExportHelper.ExportObjectsAsync(objects, dialog.FileName);
+            MessageBox.Show($"Exported {objects.Count()} objects to {dialog.FileName}", "Export Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Export failed: {ex.Message}", "Export Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 
     private void OpenPropertySheet(DirectoryObject directoryObject)

@@ -263,6 +263,154 @@ public class ActiveDirectoryService : IActiveDirectoryService
         });
     }
 
+    public Task<IEnumerable<DirectoryObject>> SearchObjectsAsync(string domainName, string? name, string? email, string? description, string? phone)
+    {
+        return Task.Run(() =>
+        {
+            var objects = new List<DirectoryObject>();
+            var rootDn = $"DC={domainName.Replace(".", ",DC=")}";
+
+            try
+            {
+                using var entry = new DirectoryEntry($"LDAP://{rootDn}");
+                var filterParts = new List<string>();
+
+                if (!string.IsNullOrWhiteSpace(name))
+                    filterParts.Add($"(|(displayName=*{EscapeLdap(name)}*)(cn=*{EscapeLdap(name)}*)(givenName=*{EscapeLdap(name)}*)(sn=*{EscapeLdap(name)}*))");
+                if (!string.IsNullOrWhiteSpace(email))
+                    filterParts.Add($"(|(mail=*{EscapeLdap(email)}*)(userPrincipalName=*{EscapeLdap(email)}*))");
+                if (!string.IsNullOrWhiteSpace(description))
+                    filterParts.Add($"(description=*{EscapeLdap(description)}*)");
+                if (!string.IsNullOrWhiteSpace(phone))
+                    filterParts.Add($"(|(telephoneNumber=*{EscapeLdap(phone)}*)(mobile=*{EscapeLdap(phone)}*)(homePhone=*{EscapeLdap(phone)}*))");
+
+                if (filterParts.Count == 0)
+                    return objects.AsEnumerable();
+
+                var filter = $"(&(|(objectClass=user)(objectClass=group)(objectClass=computer)){string.Concat(filterParts)})";
+
+                using var searcher = new DirectorySearcher(entry);
+                searcher.Filter = filter;
+                searcher.SearchScope = SearchScope.Subtree;
+                searcher.PropertiesToLoad.Add("displayName");
+                searcher.PropertiesToLoad.Add("distinguishedName");
+                searcher.PropertiesToLoad.Add("objectGUID");
+                searcher.PropertiesToLoad.Add("objectSid");
+                searcher.PropertiesToLoad.Add("mail");
+                searcher.PropertiesToLoad.Add("userPrincipalName");
+                searcher.PropertiesToLoad.Add("description");
+                searcher.PropertiesToLoad.Add("userAccountControl");
+                searcher.PropertiesToLoad.Add("objectClass");
+                searcher.PropertiesToLoad.Add("msDS-ExternalDirectoryObjectID");
+                searcher.PropertiesToLoad.Add("msDS-ConsistencyGuid");
+                searcher.PageSize = 100;
+
+                var results = searcher.FindAll();
+                foreach (SearchResult result in results)
+                {
+                    var objectClasses = result.Properties["objectClass"];
+                    if (objectClasses.Contains("user") && objectClasses.Contains("person"))
+                        objects.Add(CreateUserFromResult(result));
+                    else if (objectClasses.Contains("group"))
+                        objects.Add(CreateGroupFromResult(result));
+                    else if (objectClasses.Contains("computer"))
+                        objects.Add(CreateComputerFromResult(result));
+                }
+            }
+            catch
+            {
+                // AD not accessible - return empty
+            }
+
+            return objects.AsEnumerable();
+        });
+    }
+
+    public Task<bool> EnableObjectAsync(string distinguishedName)
+    {
+        return Task.Run(() =>
+        {
+            try
+            {
+                using var entry = new DirectoryEntry($"LDAP://{distinguishedName}");
+                var uac = entry.Properties["userAccountControl"]?.Value as int? ?? 0;
+                entry.Properties["userAccountControl"].Value = uac & ~0x2;
+                entry.CommitChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        });
+    }
+
+    public Task<bool> DisableObjectAsync(string distinguishedName)
+    {
+        return Task.Run(() =>
+        {
+            try
+            {
+                using var entry = new DirectoryEntry($"LDAP://{distinguishedName}");
+                var uac = entry.Properties["userAccountControl"]?.Value as int? ?? 0;
+                entry.Properties["userAccountControl"].Value = uac | 0x2;
+                entry.CommitChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        });
+    }
+
+    public Task<bool> DeleteObjectAsync(string distinguishedName)
+    {
+        return Task.Run(() =>
+        {
+            try
+            {
+                using var entry = new DirectoryEntry($"LDAP://{distinguishedName}");
+                entry.DeleteTree();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        });
+    }
+
+    public Task<bool> MoveObjectAsync(string distinguishedName, string targetContainerDistinguishedName)
+    {
+        return Task.Run(() =>
+        {
+            try
+            {
+                using var entry = new DirectoryEntry($"LDAP://{distinguishedName}");
+                using var target = new DirectoryEntry($"LDAP://{targetContainerDistinguishedName}");
+                var newName = entry.Properties["name"]?.Value?.ToString() ?? "CN=Unknown";
+                entry.MoveTo(target, newName);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        });
+    }
+
+    private static string EscapeLdap(string input)
+    {
+        return input
+            .Replace("\\", "\\5c")
+            .Replace("*", "\\2a")
+            .Replace("(", "\\28")
+            .Replace(")", "\\29")
+            .Replace("\0", "\\00")
+            .Replace("/", "\\2f");
+    }
+
     // Helper methods
     private IEnumerable<DirectoryObject> SearchObjects(DirectoryEntry searchRoot, string filter,
         Func<SearchResult, DirectoryObject> factory)

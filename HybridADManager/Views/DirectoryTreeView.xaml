@@ -10,11 +10,17 @@
                   SelectedItemChanged="TreeView_SelectedItemChanged"
                   VirtualizingStackPanel.IsVirtualizing="True"
                   VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <TreeView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="New Saved Query..." Command="{Binding NewSavedQueryCommand}"/>
+                    <MenuItem Header="Refresh" Command="{Binding RefreshSavedQueriesCommand}"/>
+                </ContextMenu>
+            </TreeView.ContextMenu>
             <TreeView.ItemContainerStyle>
                 <Style TargetType="TreeViewItem"
                        BasedOn="{StaticResource {x:Type TreeViewItem}}">
-                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/ >
-                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/ >
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.ItemTemplate>

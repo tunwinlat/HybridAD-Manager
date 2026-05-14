@@ -286,11 +286,45 @@ public class GraphService : IGraphService
 
     public async Task ForceSyncAsync()
     {
-        // Force sync requires either:
-        // 1. Running on the AAD Connect server and calling Start-ADSyncSyncCycle
-        // 2. Using the MS Graph sync API (requires specific permissions)
-        // For now, this is a placeholder that will show a message
-        await Task.Delay(100);
+        if (_graphClient == null) return;
+
+        try
+        {
+            // Option 1: Try to trigger sync via Graph API (requires Directory.Write.All or specific sync permissions)
+            // This is typically not available to standard app permissions, so we fall back to PowerShell
+
+            // Option 2: Try local PowerShell if running on AAD Connect server
+            var psi = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "powershell.exe",
+                Arguments = "-Command \"Import-Module ADSync; Start-ADSyncSyncCycle -PolicyType Delta\"",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            using var process = System.Diagnostics.Process.Start(psi);
+            if (process != null)
+            {
+                await process.WaitForExitAsync();
+                if (process.ExitCode != 0)
+                {
+                    var error = await process.StandardError.ReadToEndAsync();
+                    if (!string.IsNullOrWhiteSpace(error))
+                        throw new InvalidOperationException($"AAD Connect sync failed: {error.Trim()}");
+                }
+            }
+        }
+        catch (Exception ex) when (ex is not InvalidOperationException)
+        {
+            // If PowerShell fails (e.g., not on sync server, module not installed),
+            // show a helpful message instead of crashing
+            throw new InvalidOperationException(
+                "Force sync requires running on the Azure AD Connect server with the ADSync PowerShell module installed. " +
+                "Alternatively, ensure your app has Directory.ReadWrite.All permissions and use the Graph sync API. " +
+                $"Original error: {ex.Message}");
+        }
     }
 
     public async Task<MailboxSettings?> GetMailboxSettingsAsync(string userId)

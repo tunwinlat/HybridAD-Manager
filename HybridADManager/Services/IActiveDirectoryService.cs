@@ -14,6 +14,11 @@ public interface IActiveDirectoryService
     Task<HybridComputer?> GetComputerDetailsAsync(string distinguishedName);
     Task<IEnumerable<string>> GetUserGroupMembershipsAsync(string userDistinguishedName);
     Task<bool> IsObjectSyncedToCloudAsync(string distinguishedName);
+    Task<IEnumerable<DirectoryObject>> SearchObjectsAsync(string domainName, string? name, string? email, string? description, string? phone);
+    Task<bool> EnableObjectAsync(string distinguishedName);
+    Task<bool> DisableObjectAsync(string distinguishedName);
+    Task<bool> DeleteObjectAsync(string distinguishedName);
+    Task<bool> MoveObjectAsync(string distinguishedName, string targetContainerDistinguishedName);
 }
 
 public class DomainNode

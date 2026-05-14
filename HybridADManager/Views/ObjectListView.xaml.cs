@@ -18,4 +18,18 @@ public partial class ObjectListView : UserControl
             vm.OpenPropertiesCommand.Execute(null);
         }
     }
+
+    private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (DataContext is ViewModels.ObjectListViewModel vm)
+        {
+            vm.SelectedObjects.Clear();
+            foreach (var item in ListView.SelectedItems)
+            {
+                if (item is DirectoryObject obj)
+                    vm.SelectedObjects.Add(obj);
+            }
+            vm.SelectedCount = ListView.SelectedItems.Count;
+        }
+    }
 }

@@ -2,13 +2,16 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HybridADManager.Models;
 using HybridADManager.Services;
+using HybridADManager.Views.Dialogs;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace HybridADManager.ViewModels;
 
 public partial class DirectoryTreeViewModel : ObservableObject
 {
     private readonly IActiveDirectoryService? _adService;
+    private readonly ISettingsService? _settingsService;
 
     [ObservableProperty]
     private ObservableCollection<DirectoryNode> _nodes = new();
@@ -21,6 +24,7 @@ public partial class DirectoryTreeViewModel : ObservableObject
     public DirectoryTreeViewModel()
     {
         _adService = App.Current?.Services?.GetService(typeof(IActiveDirectoryService)) as IActiveDirectoryService;
+        _settingsService = App.Current?.Services?.GetService(typeof(ISettingsService)) as ISettingsService;
         LoadDomainAsync();
     }
 
@@ -111,14 +115,16 @@ public partial class DirectoryTreeViewModel : ObservableObject
                     }
 
                     // Add Saved Queries
-                    domainNode.Children.Add(new DirectoryNode
+                    var savedQueriesNode = new DirectoryNode
                     {
                         DisplayName = "Saved Queries",
                         NodeType = NodeType.SavedQueries,
                         Children = new ObservableCollection<DirectoryNode>()
-                    });
+                    };
+                    domainNode.Children.Add(savedQueriesNode);
 
                     Nodes.Add(domainNode);
+                    await PopulateSavedQueriesAsync(savedQueriesNode);
                     return;
                 }
             }
@@ -134,6 +140,13 @@ public partial class DirectoryTreeViewModel : ObservableObject
 
     private void LoadDummyData()
     {
+        var savedQueriesNode = new DirectoryNode
+        {
+            DisplayName = "Saved Queries",
+            NodeType = NodeType.SavedQueries,
+            Children = new ObservableCollection<DirectoryNode>()
+        };
+
         var domainNode = new DirectoryNode
         {
             DisplayName = "contoso.com (demo)",
@@ -181,16 +194,12 @@ public partial class DirectoryTreeViewModel : ObservableObject
                         new DirectoryNode { DisplayName = "Loading...", NodeType = NodeType.CustomOU }
                     }
                 },
-                new DirectoryNode
-                {
-                    DisplayName = "Saved Queries",
-                    NodeType = NodeType.SavedQueries,
-                    Children = new ObservableCollection<DirectoryNode>()
-                }
+                savedQueriesNode
             }
         };
 
         Nodes.Add(domainNode);
+        _ = PopulateSavedQueriesAsync(savedQueriesNode);
     }
 
     private void LoadDummyChildren(DirectoryNode node)
@@ -272,5 +281,92 @@ public partial class DirectoryTreeViewModel : ObservableObject
                 SyncStatus = new SyncStatus { Status = sync }
             }
         };
+    }
+
+    private async Task PopulateSavedQueriesAsync(DirectoryNode savedQueriesNode)
+    {
+        if (_settingsService == null) return;
+
+        savedQueriesNode.Children.Clear();
+
+        try
+        {
+            var queries = await _settingsService.GetSavedQueriesAsync();
+            foreach (var query in queries)
+            {
+                savedQueriesNode.Children.Add(new DirectoryNode
+                {
+                    DisplayName = query.Name,
+                    DistinguishedName = $"QUERY:{query.Id}",
+                    NodeType = NodeType.SavedQueries,
+                    DirectoryObject = null
+                });
+            }
+        }
+        catch { }
+    }
+
+    private DirectoryNode? FindSavedQueriesNode()
+    {
+        foreach (var node in Nodes)
+        {
+            var found = FindSavedQueriesNodeRecursive(node);
+            if (found != null) return found;
+        }
+        return null;
+    }
+
+    private static DirectoryNode? FindSavedQueriesNodeRecursive(DirectoryNode node)
+    {
+        if (node.NodeType == NodeType.SavedQueries && string.IsNullOrEmpty(node.DistinguishedName))
+            return node;
+
+        foreach (var child in node.Children)
+        {
+            var found = FindSavedQueriesNodeRecursive(child);
+            if (found != null) return found;
+        }
+        return null;
+    }
+
+    [RelayCommand]
+    private async Task RefreshSavedQueriesAsync()
+    {
+        try
+        {
+            var savedQueriesNode = FindSavedQueriesNode();
+            if (savedQueriesNode != null)
+            {
+                await PopulateSavedQueriesAsync(savedQueriesNode);
+            }
+        }
+        catch { }
+    }
+
+    [RelayCommand]
+    private void NewSavedQuery()
+    {
+        var dialog = new SavedQueryDialog
+        {
+            Owner = Application.Current.MainWindow
+        };
+
+        if (dialog.ShowDialog() == true && dialog.SavedQuery != null)
+        {
+            _ = SaveQueryAndRefreshAsync(dialog.SavedQuery);
+        }
+    }
+
+    private async Task SaveQueryAndRefreshAsync(SavedQuery query)
+    {
+        try
+        {
+            if (_settingsService != null)
+            {
+                await _settingsService.SaveSavedQueryAsync(query);
+            }
+            await RefreshSavedQueriesAsync();
+        }
+        catch { }
     }
 }

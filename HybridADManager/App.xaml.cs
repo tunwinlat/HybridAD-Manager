@@ -24,5 +24,6 @@ public partial class App : Application
         services.AddSingleton<IAuthenticationService, AuthenticationService>();
         services.AddSingleton<IGraphService, GraphService>();
         services.AddSingleton<IActiveDirectoryService, ActiveDirectoryService>();
+        services.AddSingleton<ISettingsService, SettingsService>();
     }
 }

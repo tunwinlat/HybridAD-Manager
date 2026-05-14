@@ -28,11 +28,14 @@
         </Border>
 
         <!-- Object List -->
-        <ListView Grid.Row="1"
+        <ListView x:Name="ListView"
+                  Grid.Row="1"
                   ItemsSource="{Binding FilteredObjects}"
                   SelectedItem="{Binding SelectedObject}"
+                  SelectionMode="Extended"
                   AlternationCount="2"
-                  MouseDoubleClick="ListView_MouseDoubleClick">
+                  MouseDoubleClick="ListView_MouseDoubleClick"
+                  SelectionChanged="ListView_SelectionChanged">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Name" Width="220">
@@ -79,13 +82,14 @@
 
             <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Properties" Command="{Binding OpenPropertiesCommand}"/>
+                    <MenuItem Header="Properties" Command="{Binding OpenPropertiesCommand}" CommandParameter="{Binding SelectedObject}" />
                     <Separator/>
-                    <MenuItem Header="Reset Password..."/>
-                    <MenuItem Header="Disable Account"/>
-                    <MenuItem Header="Move..."/>
+                    <MenuItem Header="Enable Account" Command="{Binding EnableSelectedCommand}" />
+                    <MenuItem Header="Disable Account" Command="{Binding DisableSelectedCommand}" />
+                    <MenuItem Header="Reset Password..." Command="{Binding ResetPasswordCommand}" />
                     <Separator/>
-                    <MenuItem Header="Delete"/>
+                    <MenuItem Header="Move..." Command="{Binding MoveSelectedCommand}" />
+                    <MenuItem Header="Delete" Command="{Binding DeleteSelectedCommand}" />
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>

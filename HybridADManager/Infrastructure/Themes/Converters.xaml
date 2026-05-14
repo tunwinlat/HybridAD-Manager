@@ -6,5 +6,6 @@
     <converters:SyncStatusToBrushConverter x:Key="SyncStatusToBrushConverter"/>
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
+    <converters:StringNotEmptyToVisibilityConverter x:Key="StringNotEmptyToVisibilityConverter"/>
 
 </ResourceDictionary>
