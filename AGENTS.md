@@ -2,7 +2,7 @@
 
 > **Target reader:** AI coding agents with no prior knowledge of this project.  
 > **Language:** All source comments, documentation, and UI strings are in English.  
-> **Last updated:** 2026-05-13
+> **Last updated:** 2026-08-03
 
 ---
 
@@ -10,7 +10,7 @@
 
 HybridAD-Manager is a **standalone Windows WPF desktop application** that provides a single pane of glass for managing **Hybrid Active Directory + Microsoft Entra ID** environments. The UI is modeled after the familiar **Active Directory Users & Computers (dsa.msc)** console, extended with cloud-native tabs for Microsoft 365 / Entra ID management.
 
-**Current status:** Phases 1–3 are complete (Foundation & Shell, Active Directory integration, Entra ID integration). Phase 4+ tabs (Licenses, Mailbox, Email Addresses) are placeholder stubs.
+**Current status:** Phases 1–6 are complete (Foundation & Shell, Active Directory integration, Entra ID integration, Cloud Management tabs, Search/Saved Queries + Bulk Operations + Force Sync + CSV export, and Keyboard Shortcuts/Drag-and-Drop/Accessibility/MSIX packaging). See the root README for the verified feature list.
 
 ---
 

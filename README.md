@@ -1,216 +1,208 @@
+<div align="center">
+
 # HybridAD-Manager
 
-> ⚠️ **WARNING: WORK IN PROGRESS — NOT PRODUCTION READY**
->
-> This project is currently **under active development** and has **not been thoroughly tested** in production environments. Features may be incomplete, unstable, or subject to breaking changes. Use at your own risk.
+**A single pane of glass for managing Hybrid Active Directory and Microsoft Entra ID.**
 
----
+A Windows WPF desktop application modeled after Active Directory Users & Computers, extended with cloud-native tabs for Microsoft 365 and Entra ID management.
 
-## What is HybridAD-Manager?
+[![.NET 8](https://img.shields.io/badge/.NET-8-512BD4?logo=dotnet)](https://dotnet.microsoft.com/)
+[![C# 12](https://img.shields.io/badge/C%23-12-239120?logo=csharp&logoColor=white)](https://learn.microsoft.com/dotnet/csharp/)
+[![WPF](https://img.shields.io/badge/UI-WPF-0078D7)](https://learn.microsoft.com/dotnet/desktop/wpf/)
+[![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11-0078D6?logo=windows&logoColor=white)](#prerequisites)
+[![License](https://img.shields.io/badge/license-not--yet--specified-lightgrey)](#license)
 
-**HybridAD-Manager** is a standalone Windows WPF desktop application that provides a single pane of glass for managing **Hybrid Active Directory + Microsoft Entra ID** environments. The UI is modeled after the familiar **Active Directory Users & Computers (dsa.msc)** console, extended with cloud-native tabs for Microsoft 365 / Entra ID management.
+[Features](#features) · [Quick start](#quick-start) · [Configuration](#configuration) · [Architecture](#architecture) · [Development](#development)
 
-No more context-switching between ADUC, the M365 Admin Center, and the Exchange Admin Center.
+</div>
 
----
+> ⚠️ **Work in progress — not production ready.** This project is under active development and has not been thoroughly tested in production environments. Features may be incomplete, unstable, or subject to breaking changes.
+
+HybridAD-Manager ends the context-switching between ADUC (`dsa.msc`), the Microsoft 365 admin center, and the Exchange admin center. One console shows on-premises Active Directory objects alongside their Microsoft Entra ID cloud state — sync status, licenses, mailbox settings, and proxy addresses — with live correlation between the two directories.
 
 ## Features
 
-### Core Shell
-- **ADUC-style interface** — Menu, Toolbar, Tree/List split pane, Status Bar
-- **Domain/OU tree** — Expandable tree with standard containers and custom OUs
-- **Object list view** — Details view with columns, sorting, multi-select, context menus
-- **Custom XAML theme** — Mimics Windows 11 admin-tool aesthetics
+| Area | What is included |
+| --- | --- |
+| Console shell | ADUC-style interface with menu bar, toolbar, domain/OU tree, details list with sorting and multi-select, context menus, status bar, and a custom XAML theme in the style of Windows 11 admin tools. |
+| Active Directory | Domain discovery and OU tree walking via `System.DirectoryServices`; user, group, and computer retrieval; group membership management; enable, disable, delete, and move operations; LDAP-escaped global search by name, email, description, or phone. |
+| Property sheets | 13-tab user property sheet: General, Address, Account, Profile, Telephones, Organization, Member Of, Dial-in, Environment, Hybrid Status, Licenses, Mailbox, and Email Addresses. |
+| Microsoft Entra ID | MSAL.NET public-client authentication with OAuth2 + PKCE and MFA support, silent token refresh, and a platform-backed token cache (Windows DPAPI, with macOS Keychain and Linux Secret Service configuration in the cache helper). Microsoft Graph SDK v5 for all cloud operations. |
+| Hybrid correlation | AD objects matched with Entra ID objects by UPN and immutable ID, with visual sync indicators for In Sync, Pending, Cloud-only, and Sync Error states. |
+| Hybrid Status tab | Live sync state loaded lazily per object: Entra object ID, immutable ID, directory source, on-premises metadata (DN, domain, SAM, SID), and provisioning errors with error codes. |
+| Force sync | Triggers an Azure AD Connect delta sync by invoking `Start-ADSyncSyncCycle -PolicyType Delta` through local PowerShell; requires the app to run on the Azure AD Connect server with the ADSync module installed. |
+| Licenses tab | Visual SKU and service-plan grid for the signed-in tenant's subscribed SKUs, with assign/remove per user. |
+| Mailbox tab | Auto-reply (automatic replies) editor, mail forwarding, and address-list visibility through the Graph mailbox settings API. |
+| Email Addresses tab | `proxyAddresses` editor with validation and primary SMTP address management. |
+| Find and saved queries | Global Find dialog (F3) with composable LDAP filters, plus saved queries persisted to JSON that surface in the tree under a Saved Queries node. |
+| Bulk operations | Multi-select enable, disable, and delete from the list-view context menu, with confirmation dialogs. |
+| CSV export | Export the current container or selected objects to CSV with full field coverage and proper escaping. |
+| Keyboard and drag-and-drop | F5 refresh, F3 find, Ctrl+N new user, Ctrl+G new group, Ctrl+E export, Del delete; drag objects from the list onto tree OUs to move them, with target validation and confirmation. |
+| Accessibility | 160 `AutomationProperties.Name` labels across the UI, tooltips on interactive elements, and a runtime high-contrast theme toggle in the View menu. |
+| Resilience | Graceful fallback to built-in demo data (`contoso.com`) when no domain is reachable, global `DispatcherUnhandledException` handling, and a centralized dialog service for consistent messaging. |
+| Packaging | MSIX manifest (`Package.appxmanifest`) with a single-file `win-x64` publish profile; image assets and publisher identity are placeholders awaiting real values. |
 
-### Active Directory Management
-- Domain enumeration and OU tree walking
-- User, group, and computer object retrieval
-- **13-tab property sheet**:
-  - General
-  - Address
-  - Account
-  - Profile
-  - Telephones
-  - Organization
-  - Member Of
-  - Dial-in
-  - Environment
-  - **Hybrid Status** (live cloud sync state)
-- Group membership management
-- Context menus (New, Delete, Rename, Move, Refresh, Properties)
-
-### Microsoft Entra ID Integration
-- **MSAL.NET authentication** — OAuth2 + PKCE with MFA support
-- **Token caching** — Secure platform-specific storage (Windows DPAPI, macOS Keychain, Linux Secret Service)
-- **Microsoft Graph SDK v5** — Full Entra ID read/write integration
-- Automatic silent token refresh
-
-### Hybrid Management
-- **Unified object model** — AD objects correlated with Graph by UPN / immutableId
-- **Visual sync indicators**:
-  - ✅ In Sync
-  - ⏳ Pending
-  - ☁️ Cloud-only
-  - ❌ Sync Error
-- **Hybrid Status tab** — Entra Object ID, Immutable ID, directory source, last sync time, sync errors
-- **Force Sync button** — Trigger Azure AD Connect delta sync
-
-### Cloud Management
-- **Licenses tab** — Visual SKU/service-plan grid with assign/remove
-- **Mailbox tab** — Auto-reply editor, mail forwarding, address list visibility
-- **Email Addresses tab** — `proxyAddresses` editor with validation, primary SMTP management
-
-### Search & Operations
-- **Find Dialog** — Global LDAP search across domain by name, email, description, phone
-- **Saved Queries** — Persist custom LDAP filters to JSON; appear in tree under "Saved Queries"
-- **Bulk Operations** — Multi-select enable/disable/delete; context menu on list view
-- **CSV Export** — Export objects or container to CSV with full field coverage
-- **Force Sync** — Attempts `Start-ADSyncSyncCycle` via PowerShell when on AAD Connect server
-
-### Polish & Accessibility
-- **Keyboard Shortcuts** — F5 Refresh, F3 Find, Ctrl+N New User, Ctrl+E Export, Del Delete, Enter Properties
-- **Drag-and-Drop** — Move users/groups between OUs by dragging from list to tree
-- **Accessibility** — ~160 `AutomationProperties.Name` labels, ToolTips on all interactive elements
-- **High-Contrast Theme** — Runtime toggle via View menu
-- **MSIX Packaging** — `Package.appxmanifest`, publish-ready `.csproj`, image asset placeholders
-- **Global Exception Handling** — `DispatcherUnhandledException` handler with user-friendly dialogs
-- **Dialog Service** — Centralized `IDialogService` for consistent info/warning/error display
-
-### Search & Operations
-- Quick search filter in list view
-- Graceful fallback to demo `contoso.com` data when AD is unavailable
-- Bulk operations framework foundation
-
----
-
-## Tech Stack
+## Technology stack
 
 | Layer | Technology |
-|-------|------------|
-| Framework | .NET 8 WPF (`net8.0-windows`) |
-| UI Pattern | MVVM with `CommunityToolkit.Mvvm` source generators |
-| DI Container | `Microsoft.Extensions.DependencyInjection` |
-| AD Connectivity | `System.DirectoryServices` / `System.DirectoryServices.AccountManagement` |
-| Entra ID / Graph | `Microsoft.Graph` SDK v5.46.0 |
-| Authentication | `Microsoft.Identity.Client` (MSAL.NET) — OAuth2 + PKCE, MFA support |
-| Token Cache | `Microsoft.Identity.Client.Extensions.Msal` — Windows DPAPI, macOS Keychain, Linux Secret Service |
-| Styling | Custom XAML theme mimicking ADUC + Windows 11 admin-tool aesthetics |
+| --- | --- |
+| Framework | .NET 8, WPF (`net8.0-windows`), Windows-only |
+| UI pattern | MVVM with `CommunityToolkit.Mvvm` 8.2.2 source generators |
+| Dependency injection | `Microsoft.Extensions.DependencyInjection` 8.0.0 |
+| AD connectivity | `System.DirectoryServices` 8.0.0 and `System.DirectoryServices.AccountManagement` 8.0.0 |
+| Cloud API | `Microsoft.Graph` SDK 5.46.0 |
+| Authentication | `Microsoft.Identity.Client` (MSAL.NET) 4.60.3 — OAuth2 + PKCE public client |
+| Token cache | `Microsoft.Identity.Client.Extensions.Msal` 4.60.3 |
+| Styling | Custom XAML resource dictionaries (colors, styles, data templates, high-contrast variant) |
 
----
+## Quick start
+
+### Prerequisites
+
+- Windows 10 version 1809 (10.0.17763) or newer — Windows 11 recommended
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) to build; the .NET 8 desktop runtime to run
+- Optional: line-of-sight to an Active Directory domain controller (the app falls back to demo data without one)
+- Optional: a Microsoft Entra ID app registration for cloud features (see [Configuration](#configuration))
+- Optional: Visual Studio 2022 or newer for a designer-friendly development experience
+
+### Build and run
+
+```powershell
+git clone https://github.com/tunwinlat/HybridAD-Manager.git
+cd HybridAD-Manager
+dotnet restore
+dotnet build
+dotnet run --project HybridADManager
+```
+
+On first launch the app attempts to discover the current domain. If no domain controller is reachable, it loads demo `contoso.com` data so the full UI can be explored without any infrastructure.
+
+> **Note on the application icon:** `HybridADManager.csproj` references `Resources\app.ico`, which is intentionally not committed yet (see `HybridADManager/Resources/README.txt`). Add your own icon there — or temporarily remove the `<ApplicationIcon>` line — before building.
+
+### Publish a single-file executable
+
+```powershell
+dotnet publish HybridADManager -c Release -r win-x64
+```
+
+The project is configured for `PublishSingleFile` with `SelfContained=false`, producing a single framework-dependent executable under `bin\Release\net8.0-windows\win-x64\publish`.
+
+## Configuration
+
+### Entra ID app registration
+
+Cloud features (Hybrid Status, Licenses, Mailbox, Email Addresses, Force Sync) require signing in to Microsoft Graph. Register an application first:
+
+1. Open the [Azure portal](https://portal.azure.com) → **Microsoft Entra ID** → **App registrations** → **New registration**.
+2. Name it `HybridAD-Manager`.
+3. Supported account types: **Accounts in this organizational directory only**.
+4. Redirect URI: platform **Public client/native (mobile & desktop)** → `http://localhost`.
+5. Register, then copy the **Application (client) ID**.
+6. Under **API permissions**, add the Microsoft Graph **delegated** permissions:
+   - `User.Read.All`
+   - `Group.Read.All`
+   - `Directory.Read.All`
+   - `Organization.Read.All`
+7. Click **Grant admin consent**.
+
+Then set the client ID in `HybridADManager/Services/IAuthenticationService.cs`:
+
+```csharp
+public class AuthenticationSettings
+{
+    public string ClientId { get; set; } = "your-application-client-id-here";
+    public string TenantId { get; set; } = "common";   // or your tenant ID / domain
+    // ...
+}
+```
+
+> **Note:** The repository ships with the public **Microsoft Graph Explorer** client ID as a convenience placeholder so the sign-in flow can be tried immediately. It is not affiliated with this project — register and use your own app for any real tenant.
+
+No other configuration files, secrets, or connection strings exist in the repository. Saved queries and the MSAL token cache live under `%LocalAppData%\HybridADManager` at runtime and are never committed.
+
+### Force sync prerequisites
+
+The Force Sync button runs `Start-ADSyncSyncCycle -PolicyType Delta` via local PowerShell. It only succeeds when the app is executed on the Azure AD Connect server with the ADSync PowerShell module installed; otherwise it surfaces an explanatory error.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    Admin[Administrator] --> Shell[MainWindow: menu, toolbar, tree/list, status bar]
+    Shell --> VMs[ViewModels: CommunityToolkit.Mvvm]
+    VMs --> ADSvc[ActiveDirectoryService]
+    VMs --> AuthSvc[AuthenticationService]
+    VMs --> GraphSvc[GraphService]
+    VMs --> Settings[SettingsService: saved queries JSON]
+
+    ADSvc --> LDAP[(On-premises Active Directory<br/>System.DirectoryServices / LDAP)]
+    AuthSvc --> MSAL[MSAL.NET public client<br/>OAuth2 + PKCE, token cache]
+    GraphSvc --> Graph[(Microsoft Graph v1.0<br/>users, groups, SKUs, mailbox, proxyAddresses)]
+    AuthSvc --> GraphSvc
+    GraphSvc --> Sync[Start-ADSyncSyncCycle<br/>via local PowerShell]
+```
+
+### Data flow
+
+1. `DirectoryTreeViewModel` loads the domain/OU tree from AD, falling back to demo data when no domain is reachable.
+2. `ObjectListViewModel` loads the objects of the selected node and, when signed in, correlates each object with Microsoft Graph by UPN to populate cloud metadata and sync indicators.
+3. Opening an object shows the 13-tab property sheet; the Hybrid Status tab loads live sync state lazily on first open.
+4. Cloud mutations (license assignment, mailbox settings, proxy addresses) go through `GraphService`; directory mutations (enable/disable/delete/move) go through `ActiveDirectoryService`.
+
+### Repository layout
+
+```text
+HybridAD-Manager/
+├── HybridADManager.sln                # Visual Studio solution
+├── HybridADManager/
+│   ├── App.xaml / App.xaml.cs         # Entry point, DI container, global exception handling
+│   ├── MainWindow.xaml                # Shell: menu, toolbar, tree/list split, status bar
+│   ├── Package.appxmanifest           # MSIX packaging manifest (placeholder assets)
+│   ├── Models/                        # DirectoryObject, HybridUser/Group/Computer, SyncStatus, SavedQuery
+│   ├── Services/                      # AD, MSAL auth, Graph, settings, and dialog services (+ interfaces)
+│   ├── ViewModels/                    # Main window, tree, list, find/saved-query dialogs, property-sheet tabs
+│   ├── Views/                         # Tree, list, property sheets (13 tabs), dialogs
+│   └── Infrastructure/
+│       ├── Converters/                # Value converters (visibility, icons, sync-status brushes)
+│       ├── Helpers/                   # CSV export helper
+│       └── Themes/                    # ADUC-style colors, styles, templates, high-contrast theme
+├── plan.md                            # Original development plan
+└── AGENTS.md                          # Guide for AI coding agents working on this repo
+```
+
+## Development
+
+| Command | Purpose |
+| --- | --- |
+| `dotnet restore` | Restore NuGet packages. |
+| `dotnet build` | Build the solution (Debug). |
+| `dotnet run --project HybridADManager` | Build and launch the app. |
+| `dotnet publish HybridADManager -c Release -r win-x64` | Produce a single-file framework-dependent executable. |
+
+The codebase uses nullable reference types and implicit usings, MVVM source generators (`[ObservableProperty]`, `[RelayCommand]`), and constructor-injected services registered in `App.xaml.cs`. All UI text, comments, and documentation are in English.
+
+## Security
+
+- No credentials, secrets, or tenant identifiers are stored in code or configuration files.
+- Authentication uses the OAuth2 public-client flow with PKCE; MFA is supported through the Microsoft identity platform.
+- Tokens are cached through the MSAL extension cache with platform protection (Windows DPAPI).
+- Cloud operations run under the signed-in administrator's own delegated permissions, so every action is attributable in the Entra ID audit logs.
 
 ## Screenshots
 
 *Coming soon.*
 
----
-
-## Getting Started
-
-### Prerequisites
-- Windows 10/11 with .NET 8 runtime
-- Visual Studio 2022+ (optional, for development)
-- Access to an Active Directory domain (optional — demo data works without AD)
-
-### Build & Run
-
-```bash
-cd HybridADManager
-dotnet restore
-dotnet build
-dotnet run
-```
-
-### Authentication Setup
-
-Before Entra ID features work, register an application in Azure AD:
-
-1. Go to [Azure Portal](https://portal.azure.com) → Microsoft Entra ID → App registrations
-2. Click **New registration**
-3. Name it `HybridAD-Manager`
-4. Supported account types: **Accounts in this organizational directory only**
-5. Redirect URI: **Public client/native (mobile & desktop)** → `http://localhost`
-6. Click **Register** and note the **Application (client) ID**
-7. Go to **API Permissions** → Add:
-   - `User.Read.All`
-   - `Group.Read.All`
-   - `Directory.Read.All`
-   - `Organization.Read.All`
-8. Click **Grant admin consent**
-
-Then update `AuthenticationSettings.ClientId` in `Services/IAuthenticationService.cs` with your app's client ID.
-
-> **Note:** The codebase currently ships with the **Microsoft Graph Explorer client ID** as a placeholder for testing. Replace this before production use.
-
----
-
-## Architecture
-
-```
-HybridADManager/
-├── App.xaml / App.xaml.cs              # Application entry point + DI container
-├── MainWindow.xaml                     # Shell
-├── Models/
-│   ├── DirectoryObject.cs              # Base observable model
-│   ├── HybridUser.cs / HybridGroup.cs  # Unified AD + Cloud models
-│   ├── DirectoryNode.cs                # Tree node model
-│   └── SyncStatus.cs                   # Sync state model
-├── Services/
-│   ├── IActiveDirectoryService.cs      # AD operations interface
-│   ├── ActiveDirectoryService.cs       # System.DirectoryServices impl
-│   ├── IAuthenticationService.cs       # MSAL auth interface
-│   ├── AuthenticationService.cs        # OAuth2 + PKCE + token cache
-│   ├── IGraphService.cs                # Graph operations interface
-│   └── GraphService.cs                 # Microsoft Graph SDK v5
-├── ViewModels/                         # MVVM ViewModels (CommunityToolkit.Mvvm)
-├── Views/                              # XAML Views
-└── Infrastructure/
-    ├── Converters/                     # Value converters
-    └── Themes/                         # Colors, styles, data templates
-```
-
-### Data Flow
-1. `DirectoryTreeViewModel` loads domain/OU tree (AD first, demo fallback)
-2. `ObjectListViewModel` loads objects for the selected node (AD first, demo fallback)
-3. When authenticated, objects are correlated with Graph by UPN to populate cloud metadata
-4. Double-click / Properties opens the 13-tab property sheet
-5. `HybridStatusTabViewModel` loads live sync state lazily when the tab is opened
-
----
-
-## Development Status
-
-| Phase | Status | Description |
-|-------|--------|-------------|
-| Phase 1 | ✅ Complete | Foundation & Shell |
-| Phase 2 | ✅ Complete | Active Directory Integration |
-| Phase 3 | ✅ Complete | Entra ID Integration |
-| Phase 4 | ✅ Complete | Cloud Management Tabs (Licenses, Mailbox, Email Addresses) |
-| Phase 5 | ✅ Complete | Search / Saved Queries, Bulk Operations, Force Sync, Export |
-| Phase 6 | ✅ Complete | Keyboard Shortcuts, Drag-and-Drop, Accessibility, MSIX Packaging |
-
----
-
-## Security
-
-- **No credentials are stored in code or configuration files**
-- Uses MSAL.NET with OAuth2 + PKCE (public client flow)
-- Supports MFA
-- Tokens are cached via platform-specific secure storage
-- Per-admin individual credentials (actions traceable in unified audit log)
-
----
-
 ## Contributing
 
-This project is in early development. Contributions, feedback, and bug reports are welcome!
+This project is in early development. Feedback, bug reports, and pull requests are welcome.
 
----
+1. Fork the repository and create a focused branch.
+2. Verify `dotnet build` succeeds and exercise the change against either a test domain or the built-in demo data.
+3. Open a pull request describing the motivation and the verification performed.
 
 ## License
 
-*To be determined.*
-
----
+No license has been chosen for this project yet. Until one is added, the code is public for viewing but all rights are reserved by the author. If you would like to use or build on it, please open an issue.
 
 ## Acknowledgments
 
