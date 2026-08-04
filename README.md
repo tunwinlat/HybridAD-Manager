@@ -10,7 +10,7 @@ A Windows WPF desktop application modeled after Active Directory Users & Compute
 [![C# 12](https://img.shields.io/badge/C%23-12-239120?logo=csharp&logoColor=white)](https://learn.microsoft.com/dotnet/csharp/)
 [![WPF](https://img.shields.io/badge/UI-WPF-0078D7)](https://learn.microsoft.com/dotnet/desktop/wpf/)
 [![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11-0078D6?logo=windows&logoColor=white)](#prerequisites)
-[![License](https://img.shields.io/badge/license-not--yet--specified-lightgrey)](#license)
+[![License: MPL-2.0](https://img.shields.io/badge/license-MPL--2.0-blue.svg)](LICENSE)
 
 [Features](#features) · [Quick start](#quick-start) · [Configuration](#configuration) · [Architecture](#architecture) · [Development](#development)
 
@@ -202,7 +202,7 @@ This project is in early development. Feedback, bug reports, and pull requests a
 
 ## License
 
-No license has been chosen for this project yet. Until one is added, the code is public for viewing but all rights are reserved by the author. If you would like to use or build on it, please open an issue.
+HybridAD-Manager is licensed under the [Mozilla Public License 2.0](LICENSE). Modifications to MPL-covered files must remain available under the MPL when distributed.
 
 ## Acknowledgments
 
