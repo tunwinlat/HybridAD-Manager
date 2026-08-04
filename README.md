@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="HybridADManager/Resources/logo.png" width="180" alt="HybridAD-Manager logo" />
+
 # HybridAD-Manager
 
 **A single pane of glass for managing Hybrid Active Directory and Microsoft Entra ID.**
@@ -77,7 +79,7 @@ dotnet run --project HybridADManager
 
 On first launch the app attempts to discover the current domain. If no domain controller is reachable, it loads demo `contoso.com` data so the full UI can be explored without any infrastructure.
 
-> **Note on the application icon:** `HybridADManager.csproj` references `Resources\app.ico`, which is intentionally not committed yet (see `HybridADManager/Resources/README.txt`). Add your own icon there — or temporarily remove the `<ApplicationIcon>` line — before building.
+> The application icon and MSIX tile assets are committed under `HybridADManager/Resources/` (`app.ico`, `logo.png`, `StoreLogo.png`, `Square150x150Logo.png`, `Square44x44Logo.png`). The placeholder publisher CN in `Package.appxmanifest` still needs replacing before building an MSIX package.
 
 ### Publish a single-file executable
 
